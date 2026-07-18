@@ -123,9 +123,21 @@ h1,h2,.giant{font-family:var(--anton);font-weight:400;text-transform:uppercase;l
 
 /* quick quote (inline pricing selector on the main page) */
 .qq-box{display:flex;align-items:center;gap:18px;flex-wrap:wrap;max-width:760px;background:linear-gradient(160deg,var(--steel),var(--steel-2));border:1px solid rgba(201,205,212,.16);padding:26px 28px}
-.qq-box select{flex:1 1 260px;min-width:220px;background:rgba(11,11,13,.6);border:1px solid rgba(201,205,212,.24);color:var(--white);padding:14px 14px;font-family:var(--body);font-size:14.5px;border-radius:2px}
 .qq-price{font-family:var(--anton);font-size:26px;color:var(--crimson);min-width:90px;text-align:center}
 @media (max-width:560px){.qq-box{flex-direction:column;align-items:stretch}.qq-price{text-align:left}}
+
+/* custom compact dropdown (replaces native <select> to avoid the OS taking over the screen) */
+.cdrop{position:relative;flex:1 1 260px;min-width:220px}
+.cdrop-btn{width:100%;text-align:left;background:rgba(11,11,13,.6);border:1px solid rgba(201,205,212,.24);color:var(--white);padding:14px 40px 14px 14px;font-family:var(--body);font-size:14.5px;border-radius:2px;position:relative;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cdrop-btn::after{content:"";position:absolute;right:16px;top:50%;width:8px;height:8px;border-right:2px solid var(--gun);border-bottom:2px solid var(--gun);transform:translateY(-65%) rotate(45deg);pointer-events:none}
+.cdrop-btn:focus{outline:none;border-color:var(--crimson)}
+.cdrop.placeholder .cdrop-btn{color:var(--gun)}
+.cdrop-panel{position:absolute;left:0;right:0;top:calc(100% + 6px);max-height:280px;overflow-y:auto;background:#101015;border:1px solid rgba(201,205,212,.22);box-shadow:0 20px 44px rgba(0,0,0,.6);z-index:80;display:none}
+.cdrop-panel.open{display:block}
+.cdrop-group{font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gun);padding:10px 14px 6px;background:rgba(255,255,255,.02)}
+.cdrop-opt{padding:11px 14px;font-size:13.5px;color:var(--white);cursor:pointer;border-top:1px solid rgba(201,205,212,.08)}
+.cdrop-opt:hover{background:rgba(226,59,59,.14)}
+.cdrop-opt .co-price{float:right;color:var(--gun);font-family:var(--mono);font-size:11.5px}
 
 /* services */
 #services h2{font-size:clamp(44px,7vw,110px);margin-bottom:8px}
@@ -400,7 +412,10 @@ footer svg{width:26px;height:26px}
     <h2 class="reveal">What's the job?</h2>
     <div class="sec-sub reveal">Pick a problem, see the price, book it — right here.</div>
     <div class="qq-box reveal">
-      <select id="qq-service"><option value="" disabled selected>Loading services…</option></select>
+      <div class="cdrop" id="qq-service-drop">
+        <button type="button" class="cdrop-btn" id="qq-service-btn">Choose a problem…</button>
+        <div class="cdrop-panel" id="qq-service-panel"></div>
+      </div>
       <div class="qq-price" id="qq-price">—</div>
       <button class="btn btn-solid" id="qq-book-btn" type="button">Book This Job</button>
     </div>
@@ -471,8 +486,11 @@ footer svg{width:26px;height:26px}
       <div class="bk-field"><label for="bk-name">Name</label><input id="bk-name" name="full_name" type="text" required autocomplete="name"></div>
       <div class="bk-field"><label for="bk-contact">Phone or email</label><input id="bk-contact" name="contact" type="text" required autocomplete="tel"></div>
       <div class="bk-field">
-        <label for="bk-service">What do you need?</label>
-        <select id="bk-service" name="service_id" required><option value="" disabled selected>Loading services…</option></select>
+        <label for="bk-service-btn">What do you need?</label>
+        <div class="cdrop" id="bk-service-drop">
+          <button type="button" class="cdrop-btn" id="bk-service-btn">Select a service…</button>
+          <div class="cdrop-panel" id="bk-service-panel"></div>
+        </div>
       </div>
       <div class="bk-row2">
         <div class="bk-field"><label for="bk-date">Preferred date</label><input id="bk-date" name="appointment_date" type="date" required></div>
@@ -592,7 +610,7 @@ var bkModal=document.getElementById('booking-modal'), bkOpenBtn=document.getElem
 var __lenisRef=null;
 function openBooking(){ bkModal.classList.add('open'); bkModal.setAttribute('aria-hidden','false'); if(__lenisRef)__lenisRef.stop(); }
 function closeBooking(){ bkModal.classList.remove('open'); bkModal.setAttribute('aria-hidden','true'); if(__lenisRef)__lenisRef.start(); }
-if(bkOpenBtn)bkOpenBtn.addEventListener('click',openBooking);
+if(bkOpenBtn)bkOpenBtn.addEventListener('click',function(){startBookingFlow(null)});
 if(bkCloseBtn)bkCloseBtn.addEventListener('click',closeBooking);
 if(bkModal)bkModal.addEventListener('click',function(e){if(e.target===bkModal)closeBooking()});
 
@@ -701,7 +719,13 @@ if(authForm){
         return;
       }
       authStatus.className='bk-status ok'; authStatus.textContent='Welcome!';
-      setTimeout(function(){ modalClose(authModal); authForm.reset(); authSubmit.disabled=false; },700);
+      setTimeout(function(){
+        modalClose(authModal); authForm.reset(); authSubmit.disabled=false;
+        if(bookingIntentActive){
+          var toBook = pendingBookingService; pendingBookingService=null; bookingIntentActive=false;
+          startBookingFlow(toBook);
+        }
+      },700);
     }).catch(function(err){
       authStatus.className='bk-status err'; authStatus.textContent=err.message||'Something went wrong.';
       authSubmit.disabled=false;
@@ -717,7 +741,13 @@ if(authOtpForm){
     sb.auth.verifyOtp({email:pendingSignupEmail, token:code, type:'signup'}).then(function(res){
       if(res.error){ throw res.error }
       authOtpStatus.className='bk-status ok'; authOtpStatus.textContent='Verified — welcome!';
-      setTimeout(function(){ modalClose(authModal); authForm.reset(); authOtpForm.reset(); authForm.style.display='block'; authOtpForm.style.display='none'; authOtpSubmit.disabled=false; },700);
+      setTimeout(function(){
+        modalClose(authModal); authForm.reset(); authOtpForm.reset(); authForm.style.display='block'; authOtpForm.style.display='none'; authOtpSubmit.disabled=false;
+        if(bookingIntentActive){
+          var toBook = pendingBookingService; pendingBookingService=null; bookingIntentActive=false;
+          startBookingFlow(toBook);
+        }
+      },700);
     }).catch(function(err){
       authOtpStatus.className='bk-status err'; authOtpStatus.textContent=err.message||'Invalid or expired code.';
       authOtpSubmit.disabled=false;
@@ -778,66 +808,105 @@ function loadProfile(){
   });
 }
 
-/* ---- load services into the booking dropdown + the on-page Quick Quote box ---- */
-var bkServiceSel = document.getElementById('bk-service');
-var qqSel = document.getElementById('qq-service'), qqPrice = document.getElementById('qq-price'), qqBookBtn = document.getElementById('qq-book-btn');
-function buildServiceOptionsHtml(data, placeholder){
-  var byCat = {};
-  data.forEach(function(s){ (byCat[s.category]=byCat[s.category]||[]).push(s) });
-  var html='<option value="" disabled selected>'+placeholder+'</option>';
-  Object.keys(byCat).forEach(function(cat){
-    html += '<optgroup label="'+cat+'">';
-    byCat[cat].forEach(function(s){
-      var priceLabel = s.price>0 ? ('$'+s.price.toFixed(2)) : 'Quote';
-      html += '<option value="'+s.id+'">'+s.name+' — '+priceLabel+'</option>';
-    });
-    html += '</optgroup>';
-  });
-  return html;
+/* ---- custom compact dropdown component (avoids the OS full-screen picker) ---- */
+function initDropdown(prefix){
+  var drop=document.getElementById(prefix+'-drop'), btn=document.getElementById(prefix+'-btn'), panel=document.getElementById(prefix+'-panel');
+  if(!drop)return null;
+  var selectedId='';
+  function close(){ panel.classList.remove('open') }
+  function open(){ document.querySelectorAll('.cdrop-panel.open').forEach(function(p){p.classList.remove('open')}); panel.classList.add('open') }
+  btn.addEventListener('click',function(e){ e.stopPropagation(); panel.classList.contains('open')?close():open() });
+  document.addEventListener('click',function(e){ if(!drop.contains(e.target))close() });
+  return {
+    render:function(data, placeholder, onSelect){
+      var byCat={};
+      data.forEach(function(s){ (byCat[s.category]=byCat[s.category]||[]).push(s) });
+      var html='';
+      Object.keys(byCat).forEach(function(cat){
+        html += '<div class="cdrop-group">'+cat+'</div>';
+        byCat[cat].forEach(function(s){
+          var priceLabel = s.price>0 ? ('$'+s.price.toFixed(2)) : 'Quote';
+          html += '<div class="cdrop-opt" data-id="'+s.id+'">'+s.name+'<span class="co-price">'+priceLabel+'</span></div>';
+        });
+      });
+      panel.innerHTML = html;
+      btn.textContent = placeholder; drop.classList.add('placeholder');
+      panel.querySelectorAll('.cdrop-opt').forEach(function(opt){
+        opt.addEventListener('click',function(){
+          selectedId = opt.dataset.id;
+          var svc = data.find(function(s){return s.id===selectedId});
+          btn.textContent = svc ? svc.name : placeholder;
+          drop.classList.remove('placeholder');
+          close();
+          if(onSelect)onSelect(svc);
+        });
+      });
+    },
+    getValue:function(){ return selectedId },
+    setValue:function(id, data){
+      var svc=data.find(function(s){return s.id===id});
+      if(!svc)return;
+      selectedId=id; btn.textContent=svc.name; drop.classList.remove('placeholder');
+      return svc;
+    }
+  };
 }
+var qqDrop = initDropdown('qq-service');
+var bkDrop = initDropdown('bk-service');
+var qqPrice = document.getElementById('qq-price'), qqBookBtn = document.getElementById('qq-book-btn');
+var pendingBookingService = null;
+var bookingIntentActive = false;
+
 function loadServices(){
   if(!sb)return;
   sb.from('services').select('*').eq('active',true).order('sort_order').then(function(res){
     if(res.error||!res.data){
-      if(bkServiceSel)bkServiceSel.innerHTML='<option value="">Unable to load services</option>';
-      if(qqSel)qqSel.innerHTML='<option value="">Unable to load services</option>';
+      if(bkDrop)bkDrop.render([],'Unable to load services');
+      if(qqDrop)qqDrop.render([],'Unable to load services');
       return;
     }
     servicesCache = res.data;
-    if(bkServiceSel)bkServiceSel.innerHTML = buildServiceOptionsHtml(res.data,'Select a service…');
-    if(qqSel)qqSel.innerHTML = buildServiceOptionsHtml(res.data,'Choose a problem…');
+    if(bkDrop)bkDrop.render(res.data,'Select a service…');
+    if(qqDrop)qqDrop.render(res.data,'Choose a problem…', function(svc){
+      qqPrice.textContent = svc ? (svc.price>0 ? ('$'+svc.price.toFixed(2)) : 'Quote') : '—';
+    });
   });
 }
 loadServices();
 
-if(qqSel){
-  qqSel.addEventListener('change',function(){
-    var svc = servicesCache.find(function(s){return s.id===qqSel.value});
-    qqPrice.textContent = svc ? (svc.price>0 ? ('$'+svc.price.toFixed(2)) : 'Quote') : '—';
-  });
+function startBookingFlow(preselectId){
+  if(!currentSession){
+    pendingBookingService = preselectId || null;
+    bookingIntentActive = true;
+    openAuth('signin');
+    authStatus.className='bk-status err';
+    authStatus.textContent='Sign in (or create a verified account) to book a job.';
+    return;
+  }
+  openBooking();
+  if(preselectId && bkDrop){
+    var svc = bkDrop.setValue(preselectId, servicesCache);
+  }
 }
 if(qqBookBtn){
   qqBookBtn.addEventListener('click',function(){
-    if(!qqSel.value){ qqSel.focus(); return }
-    openBooking();
-    setTimeout(function(){
-      if(bkServiceSel){
-        bkServiceSel.value = qqSel.value;
-        bkServiceSel.dispatchEvent(new Event('change'));
-      }
-    },50);
+    var id = qqDrop ? qqDrop.getValue() : '';
+    if(!id){ document.getElementById('qq-service-btn').focus(); return }
+    startBookingFlow(id);
   });
 }
 
-/* ---- booking submit via supabase-js ---- */
+/* ---- booking submit via supabase-js (requires a verified, signed-in account) ---- */
 var bkForm=document.getElementById('bk-form'), bkStatus=document.getElementById('bk-status'), bkSubmit=document.getElementById('bk-submit');
 if(bkForm){
   bkForm.addEventListener('submit',function(e){
     e.preventDefault();
     if(!sb){bkStatus.className='bk-status err';bkStatus.textContent='Booking is unavailable right now — please call the shop.';return}
+    if(!currentSession){bkStatus.className='bk-status err';bkStatus.textContent='Please sign in to book.';return}
+    var serviceId = bkDrop ? bkDrop.getValue() : '';
+    if(!serviceId){bkStatus.className='bk-status err';bkStatus.textContent='Please choose a service.';return}
     bkSubmit.disabled=true; bkSubmit.textContent='Sending...';
     bkStatus.className='bk-status'; bkStatus.textContent='';
-    var serviceId = bkServiceSel.value;
     var svc = servicesCache.find(function(s){return s.id===serviceId});
     var payload={
       full_name: document.getElementById('bk-name').value.trim(),
@@ -845,9 +914,9 @@ if(bkForm){
       appointment_date: document.getElementById('bk-date').value,
       appointment_time: document.getElementById('bk-time').value,
       notes: document.getElementById('bk-reason').value.trim() || null,
-      service_id: serviceId || null,
+      service_id: serviceId,
       price_at_booking: svc ? svc.price : null,
-      user_id: currentSession ? currentSession.user.id : null
+      user_id: currentSession.user.id
     };
     sb.from('appointments').insert(payload).then(function(res){
       if(res.error){ throw res.error }
