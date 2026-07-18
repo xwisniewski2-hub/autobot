@@ -57,7 +57,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .rider .bob{position:relative;animation:bob 3.6s ease-in-out infinite}
 .rider.r2 .bob{animation-duration:4.3s;animation-delay:-1.4s}
 @keyframes bob{0%,100%{transform:translateY(0) rotate(-.6deg)}50%{transform:translateY(-9px) rotate(.7deg)}}
-.rider img{width:100%;height:auto;filter:drop-shadow(0 18px 30px rgba(0,0,0,.55))}
+.rider img{width:100%;height:auto}
 .rider .shadow{position:absolute;left:8%;right:8%;bottom:-16px;height:26px;background:radial-gradient(50% 50% at 50% 50%, rgba(0,0,0,.55), transparent 70%);animation:shadowPulse 3.6s ease-in-out infinite}
 .rider.r2 .shadow{animation-duration:4.3s;animation-delay:-1.4s}
 @keyframes shadowPulse{0%,100%{transform:scaleX(1);opacity:.85}50%{transform:scaleX(.9);opacity:.6}}
@@ -260,7 +260,7 @@ footer svg{width:26px;height:26px}
 /* ---------- ADMIN PANEL ---------- */
 #admin-modal{position:fixed;inset:0;z-index:75;display:none;background:rgba(6,6,7,.92);backdrop-filter:blur(6px);padding:5vh 4vw}
 #admin-modal.open{display:block}
-.admin-panel{max-width:1100px;margin:0 auto;background:linear-gradient(165deg,var(--steel),#0e0e12);border:1px solid rgba(201,205,212,.16);max-height:90vh;display:flex;flex-direction:column;-webkit-overflow-scrolling:touch;touch-action:pan-y;overscroll-behavior:contain}
+.admin-panel{max-width:1320px;margin:0 auto;background:linear-gradient(165deg,var(--steel),#0e0e12);border:1px solid rgba(201,205,212,.16);max-height:90vh;display:flex;flex-direction:column;-webkit-overflow-scrolling:touch;touch-action:pan-y;overscroll-behavior:contain}
 .admin-head{display:flex;justify-content:space-between;align-items:center;padding:28px 32px 0}
 .admin-head h3{font-family:var(--anton);font-size:clamp(26px,3.6vw,34px);text-transform:uppercase}
 .admin-tabs{display:flex;gap:0;margin:20px 32px 0;border:1px solid rgba(201,205,212,.2)}
@@ -273,6 +273,22 @@ footer svg{width:26px;height:26px}
 .adm-row .adm-del{background:transparent;color:var(--crimson);font-family:var(--mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;border:1px solid var(--crimson);padding:8px;text-align:center}
 @media (max-width:820px){.adm-row{grid-template-columns:1fr 1fr}}
 .admin-add-service{border-top:1px solid rgba(201,205,212,.16);padding-top:18px;margin-top:20px}
+.adm-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:28px}
+.adm-stat{border:1px solid rgba(201,205,212,.16);background:linear-gradient(160deg,var(--steel),var(--steel-2));padding:20px 18px}
+.adm-stat .adm-stat-val{font-family:var(--anton);font-size:clamp(26px,3vw,34px);color:var(--white);line-height:1}
+.adm-stat .adm-stat-lbl{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--gun);margin-top:8px}
+.adm-stat.accent .adm-stat-val{color:var(--crimson)}
+.adm-stat.accent-blue .adm-stat-val{color:var(--blue)}
+.adm-subhead{font-family:var(--anton);font-size:clamp(18px,2vw,22px);text-transform:uppercase;margin:0 0 14px}
+.adm-role-badge{display:inline-block;padding:3px 9px;font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;border-radius:2px}
+.adm-role-badge.admin{background:rgba(46,95,216,.22);color:#9db8ff}
+.adm-role-badge.customer{background:rgba(201,205,212,.14);color:var(--gun)}
+.adm-toggle-role{background:transparent;color:var(--chrome);font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;border:1px solid rgba(201,205,212,.3);padding:8px;text-align:center;transition:border-color .3s,color .3s}
+.adm-toggle-role:hover{border-color:var(--blue);color:var(--white)}
+.adm-member-search{width:100%;background:rgba(11,11,13,.6);border:1px solid rgba(201,205,212,.22);color:var(--white);padding:12px 14px;font-family:var(--body);font-size:14px;margin-bottom:16px}
+.adm-row-recent{grid-template-columns:1.4fr 1.6fr 1fr 1fr}
+.adm-row-member{grid-template-columns:1.3fr 1.6fr 1fr 1fr 1fr}
+@media (max-width:820px){.adm-row-recent,.adm-row-member{grid-template-columns:1fr 1fr}}
 
 /* reduced motion + mobile */
 @media (prefers-reduced-motion: reduce){
@@ -594,10 +610,21 @@ footer svg{width:26px;height:26px}
       <button class="bk-close" id="admin-close" type="button" aria-label="Close"><span class="x"></span></button>
     </div>
     <div class="admin-tabs">
-      <button type="button" class="admin-tab active" data-atab="bookings">Bookings</button>
+      <button type="button" class="admin-tab active" data-atab="dashboard">Dashboard</button>
+      <button type="button" class="admin-tab" data-atab="bookings">Bookings</button>
+      <button type="button" class="admin-tab" data-atab="members">Members</button>
       <button type="button" class="admin-tab" data-atab="services">Services & Pricing</button>
     </div>
-    <div id="admin-bookings" class="admin-pane"><div class="acct-empty">Loading…</div></div>
+    <div id="admin-dashboard" class="admin-pane">
+      <div class="adm-stats" id="admin-stats"><div class="acct-empty">Loading…</div></div>
+      <div class="adm-subhead">Recently Joined</div>
+      <div id="admin-recent-members"><div class="acct-empty">Loading…</div></div>
+    </div>
+    <div id="admin-bookings" class="admin-pane" style="display:none"><div class="acct-empty">Loading…</div></div>
+    <div id="admin-members" class="admin-pane" style="display:none">
+      <input type="text" class="adm-member-search" id="admin-member-search" placeholder="Search members by name or email…">
+      <div id="admin-members-list"><div class="acct-empty">Loading…</div></div>
+    </div>
     <div id="admin-services" class="admin-pane" style="display:none">
       <div id="admin-services-list"><div class="acct-empty">Loading…</div></div>
       <div class="admin-add-service">
@@ -954,19 +981,140 @@ if(bkForm){
 
 /* ============ ADMIN PANEL ============ */
 var adminTabs=document.querySelectorAll('.admin-tab');
+var adminPaneIds=['dashboard','bookings','members','services'];
 adminTabs.forEach(function(t){
   t.addEventListener('click',function(){
     adminTabs.forEach(function(x){x.classList.remove('active')});
     t.classList.add('active');
-    document.getElementById('admin-bookings').style.display = t.dataset.atab==='bookings' ? 'block' : 'none';
-    document.getElementById('admin-services').style.display = t.dataset.atab==='services' ? 'block' : 'none';
+    adminPaneIds.forEach(function(id){
+      var pane=document.getElementById('admin-'+id);
+      if(pane) pane.style.display = (t.dataset.atab===id) ? 'block' : 'none';
+    });
   });
 });
 function openAdminPanel(){
   if(!currentProfile || currentProfile.role!=='admin'){ return }
   modalOpen(adminModal);
+  loadAdminDashboard();
   loadAdminBookings();
+  loadAdminMembers();
   loadAdminServices();
+}
+function timeAgo(iso){
+  var d=new Date(iso), diff=(Date.now()-d.getTime())/1000;
+  if(diff<60)return 'just now';
+  if(diff<3600)return Math.floor(diff/60)+'m ago';
+  if(diff<86400)return Math.floor(diff/3600)+'h ago';
+  if(diff<2592000)return Math.floor(diff/86400)+'d ago';
+  return d.toLocaleDateString();
+}
+function loadAdminDashboard(){
+  var statsBox=document.getElementById('admin-stats');
+  var recentBox=document.getElementById('admin-recent-members');
+  statsBox.innerHTML='<div class="acct-empty">Loading…</div>';
+  recentBox.innerHTML='<div class="acct-empty">Loading…</div>';
+  Promise.all([
+    sb.from('profiles').select('id',{count:'exact',head:true}),
+    sb.from('profiles').select('id',{count:'exact',head:true}).eq('role','admin'),
+    sb.from('appointments').select('id',{count:'exact',head:true}),
+    sb.from('appointments').select('id',{count:'exact',head:true}).eq('status','pending'),
+    sb.from('appointments').select('id',{count:'exact',head:true}).eq('status','confirmed'),
+    sb.from('appointments').select('price_at_booking').eq('status','completed'),
+    sb.from('services').select('id',{count:'exact',head:true}).eq('active',true),
+    sb.from('profiles').select('id,created_at').order('created_at',{ascending:false}).limit(200)
+  ]).then(function(results){
+    var totalMembers=results[0].count||0;
+    var adminCount=results[1].count||0;
+    var totalBookings=results[2].count||0;
+    var pendingCount=results[3].count||0;
+    var confirmedCount=results[4].count||0;
+    var completedRevenue=(results[5].data||[]).reduce(function(sum,r){return sum+(Number(r.price_at_booking)||0)},0);
+    var activeServices=results[6].count||0;
+    var allMembers=results[7].data||[];
+    var now=Date.now();
+    var joined7=allMembers.filter(function(m){return (now-new Date(m.created_at).getTime())/86400000<=7}).length;
+    var joined30=allMembers.filter(function(m){return (now-new Date(m.created_at).getTime())/86400000<=30}).length;
+    function card(val,lbl,cls){return '<div class="adm-stat'+(cls?(' '+cls):'')+'"><div class="adm-stat-val">'+val+'</div><div class="adm-stat-lbl">'+lbl+'</div></div>'}
+    statsBox.innerHTML =
+      card(totalMembers,'Total Members','accent-blue') +
+      card(joined7,'Joined Last 7 Days','accent') +
+      card(joined30,'Joined Last 30 Days') +
+      card(adminCount,'Admin Accounts') +
+      card(totalBookings,'Total Bookings','accent-blue') +
+      card(pendingCount,'Pending Bookings','accent') +
+      card(confirmedCount,'Confirmed Bookings') +
+      card(activeServices,'Active Services') +
+      card('$'+completedRevenue.toFixed(2),'Revenue (Completed)','accent');
+    var recent=allMembers.slice(0,6);
+    if(!recent.length){recentBox.innerHTML='<div class="acct-empty">No members yet.</div>';return}
+    sb.from('profiles').select('id,full_name,first_name,last_name,email,role,created_at').order('created_at',{ascending:false}).limit(6).then(function(res){
+      var rows=(res.data||[]);
+      recentBox.innerHTML = rows.map(function(m){
+        var name=(m.full_name||((m.first_name||'')+' '+(m.last_name||'')).trim())||'—';
+        return '<div class="adm-row adm-row-recent">'+
+          '<div><span class="adm-label">Name</span>'+name+'</div>'+
+          '<div><span class="adm-label">Email</span>'+(m.email||'')+'</div>'+
+          '<div><span class="adm-label">Role</span><span class="adm-role-badge '+m.role+'">'+m.role+'</span></div>'+
+          '<div><span class="adm-label">Joined</span>'+timeAgo(m.created_at)+'</div>'+
+        '</div>';
+      }).join('');
+    });
+  }).catch(function(){
+    statsBox.innerHTML='<div class="acct-empty">Unable to load stats.</div>';
+    recentBox.innerHTML='';
+  });
+}
+var allMembersCache=[];
+function renderMembers(list){
+  var box=document.getElementById('admin-members-list');
+  if(!list.length){box.innerHTML='<div class="acct-empty">No members found.</div>';return}
+  box.innerHTML = list.map(function(m){
+    var name=(m.full_name||((m.first_name||'')+' '+(m.last_name||'')).trim())||'—';
+    return '<div class="adm-row adm-row-member" data-id="'+m.id+'">'+
+      '<div><span class="adm-label">Name</span>'+name+'</div>'+
+      '<div><span class="adm-label">Email</span>'+(m.email||'')+(m.phone?('<br><span style="color:var(--gun)">'+m.phone+'</span>'):'')+'</div>'+
+      '<div><span class="adm-label">Joined</span>'+timeAgo(m.created_at)+'</div>'+
+      '<div><span class="adm-label">Role</span><span class="adm-role-badge '+m.role+'">'+m.role+'</span></div>'+
+      '<div><button class="adm-toggle-role" type="button">Make '+(m.role==='admin'?'Customer':'Admin')+'</button></div>'+
+    '</div>';
+  }).join('');
+  box.querySelectorAll('.adm-row').forEach(function(row){
+    var id=row.dataset.id;
+    row.querySelector('.adm-toggle-role').addEventListener('click',function(){
+      var member=allMembersCache.find(function(m){return m.id===id});
+      if(!member)return;
+      var newRole = member.role==='admin' ? 'customer' : 'admin';
+      if(!confirm('Change this member to '+newRole+'?'))return;
+      sb.from('profiles').update({role:newRole}).eq('id',id).then(function(res){
+        if(res.error){alert(res.error.message);return}
+        member.role=newRole;
+        renderMembers(filterMembers(document.getElementById('admin-member-search').value));
+      });
+    });
+  });
+}
+function filterMembers(q){
+  q=(q||'').trim().toLowerCase();
+  if(!q)return allMembersCache;
+  return allMembersCache.filter(function(m){
+    var name=(m.full_name||((m.first_name||'')+' '+(m.last_name||'')).trim())||'';
+    return name.toLowerCase().indexOf(q)>-1 || (m.email||'').toLowerCase().indexOf(q)>-1;
+  });
+}
+function loadAdminMembers(){
+  var box=document.getElementById('admin-members-list');
+  box.innerHTML='<div class="acct-empty">Loading…</div>';
+  sb.from('profiles').select('id,full_name,first_name,last_name,email,phone,role,created_at').order('created_at',{ascending:false}).then(function(res){
+    if(res.error){box.innerHTML='<div class="acct-empty">Unable to load members.</div>';return}
+    allMembersCache = res.data || [];
+    renderMembers(allMembersCache);
+  });
+}
+var adminMemberSearch=document.getElementById('admin-member-search');
+if(adminMemberSearch){
+  adminMemberSearch.addEventListener('input',function(){
+    renderMembers(filterMembers(this.value));
+  });
 }
 function loadAdminBookings(){
   var box=document.getElementById('admin-bookings');
@@ -1137,7 +1285,7 @@ if(tlCol && !reduce){
 gsap.utils.toArray('.reveal').forEach(function(el){
   if(el.closest('#hero'))return; /* hero handled by intro */
   gsap.to(el,{opacity:1,y:0,duration:reduce?0:1.25,ease:'power3.out',
-    scrollTrigger:{trigger:el,start:'top 86%'}});
+    scrollTrigger:{trigger:el,start:'top 86%',once:true}});
 });
 
 /* ---- ghost words gentle drift ---- */
