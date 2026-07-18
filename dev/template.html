@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rising Sun Kustoms — Motorcycle Repair · Welding · Custom Fabrication</title>
+<meta name="description" content="Rising Sun Kustoms. Motorcycle repair, maintenance, welding, and custom fabrication. Built American. Welded strong. Ridden free.">
+<link rel="icon" href="__FAVICON__">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --black:#0B0B0D; --steel:#131318; --steel-2:#191A21;
+  --crimson:#E23B3B; --blue:#2E5FD8; --white:#F5F2EA; --pure:#FAFAFA;
+  --gun:#8A8F98; --chrome:#C9CDD4;
+  --anton:'Anton',Impact,sans-serif; --mono:'IBM Plex Mono',ui-monospace,monospace; --body:'Inter',system-ui,sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:auto}
+body{background:var(--black);color:var(--white);font-family:var(--body);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+::selection{background:var(--crimson);color:var(--pure)}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+
+/* ---------- FIXED LAYERS ---------- */
+.layer{position:fixed;inset:0;pointer-events:none}
+#timeline{z-index:0;overflow:hidden}
+#timeline .tl-col{position:absolute;right:4vw;top:0;width:min(38vw,460px);will-change:transform}
+.tl-entry{margin:22vh 0;opacity:.16}
+.tl-entry .tl-year{font-family:var(--anton);font-size:clamp(44px,6vw,92px);line-height:.9;letter-spacing:.01em;color:var(--chrome)}
+.tl-entry .tl-cap{font-family:var(--mono);font-size:clamp(10px,1vw,13px);letter-spacing:.28em;text-transform:uppercase;color:var(--gun);margin-top:10px}
+.tl-entry.tl-red .tl-year{color:var(--crimson)}
+.tl-entry.tl-blue .tl-year{color:var(--blue)}
+.tl-rail{position:absolute;right:calc(4vw + 8px);top:0;bottom:0;width:1px;background:linear-gradient(var(--gun),transparent 85%);opacity:.18}
+
+#tint{z-index:1;background:
+  radial-gradient(120% 90% at 50% 0%, transparent 40%, rgba(11,11,13,.55) 100%),
+  linear-gradient(180deg, rgba(11,11,13,.25), rgba(11,11,13,0) 22%, rgba(11,11,13,0) 78%, rgba(11,11,13,.5))}
+
+#aurora{z-index:2;filter:blur(90px) saturate(1.15);opacity:.5}
+.blob{position:absolute;border-radius:50%;will-change:transform}
+.blob.b-red{width:52vw;height:52vw;background:radial-gradient(circle,var(--crimson),transparent 62%);top:-14vw;left:-12vw;animation:driftA 26s ease-in-out infinite alternate}
+.blob.b-blue{width:58vw;height:58vw;background:radial-gradient(circle,var(--blue),transparent 60%);bottom:-20vw;right:-16vw;animation:driftB 32s ease-in-out infinite alternate}
+.blob.b-white{width:24vw;height:24vw;background:radial-gradient(circle,rgba(245,242,234,.7),transparent 60%);top:40%;left:55%;opacity:.35;animation:driftC 38s ease-in-out infinite alternate}
+@keyframes driftA{to{transform:translate(9vw,14vh) scale(1.12)}}
+@keyframes driftB{to{transform:translate(-10vw,-12vh) scale(1.08)}}
+@keyframes driftC{to{transform:translate(-8vw,10vh) scale(.9)}}
+
+#grain{z-index:3;opacity:.08;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");animation:grain 1.4s steps(4) infinite}
+@keyframes grain{0%{transform:translate(0,0)}25%{transform:translate(-3%,2%)}50%{transform:translate(2%,-3%)}75%{transform:translate(-2%,-2%)}100%{transform:translate(3%,3%)}}
+
+/* ---------- THE RIDERS ---------- */
+#riders{z-index:5}
+.rider{position:absolute;top:0;left:0;will-change:transform;opacity:0}
+.rider .bob{position:relative;animation:bob 3.6s ease-in-out infinite}
+.rider.r2 .bob{animation-duration:4.3s;animation-delay:-1.4s}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-.6deg)}50%{transform:translateY(-9px) rotate(.7deg)}}
+.rider img{width:100%;height:auto;filter:drop-shadow(0 18px 30px rgba(0,0,0,.55))}
+.rider .shadow{position:absolute;left:8%;right:8%;bottom:-16px;height:26px;background:radial-gradient(50% 50% at 50% 50%, rgba(0,0,0,.55), transparent 70%);animation:shadowPulse 3.6s ease-in-out infinite}
+.rider.r2 .shadow{animation-duration:4.3s;animation-delay:-1.4s}
+@keyframes shadowPulse{0%,100%{transform:scaleX(1);opacity:.85}50%{transform:scaleX(.9);opacity:.6}}
+.rider .r-tag{position:absolute;top:-30px;left:4%;font-family:var(--mono);font-size:11px;letter-spacing:.3em;color:var(--gun);text-transform:uppercase}
+.rider .r-tag b{color:var(--crimson);font-weight:500}
+.rider.r2 .r-tag b{color:var(--blue)}
+.r1{width:min(46vw,620px)}
+.r2{width:min(40vw,540px)}
+
+/* ---------- CONTENT ---------- */
+#content{position:relative;z-index:10}
+.section{position:relative;min-height:auto;padding:8vh 6vw;display:flex;flex-direction:column;justify-content:center}
+.eyebrow{display:flex;align-items:center;gap:14px;font-family:var(--mono);font-size:12px;letter-spacing:.34em;text-transform:uppercase;color:var(--gun);margin-bottom:26px}
+.eyebrow::before{content:"";width:44px;height:1px;background:var(--crimson)}
+.eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--crimson);box-shadow:0 0 10px var(--crimson);animation:pulse 2.2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+
+h1,h2,.giant{font-family:var(--anton);font-weight:400;text-transform:uppercase;line-height:.92;letter-spacing:.005em}
+.reveal{opacity:0;transform:translateY(34px)}
+.ghost-word{position:absolute;font-family:var(--anton);text-transform:uppercase;color:transparent;-webkit-text-stroke:1px rgba(201,205,212,.10);font-size:clamp(120px,22vw,340px);line-height:1;pointer-events:none;user-select:none;white-space:nowrap}
+
+/* header */
+#site-head{position:fixed;top:0;left:0;right:0;z-index:40;display:flex;justify-content:space-between;align-items:center;padding:20px 4vw;mix-blend-mode:normal}
+.brand{display:flex;align-items:center;gap:14px;pointer-events:auto}
+.brand svg{width:40px;height:40px;display:block}
+.brand .b-txt{font-family:var(--anton);font-size:17px;letter-spacing:.08em;line-height:1.05;text-transform:uppercase}
+.brand .b-sub{font-family:var(--mono);font-size:9px;letter-spacing:.42em;color:var(--gun);text-transform:uppercase}
+#menu-btn{display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:12px;letter-spacing:.3em;text-transform:uppercase;padding:12px 18px;border:1px solid rgba(201,205,212,.25);background:rgba(11,11,13,.4);backdrop-filter:blur(6px);transition:border-color .3s}
+#menu-btn:hover{border-color:var(--crimson)}
+#menu-btn .bars{display:flex;flex-direction:column;gap:5px}
+#menu-btn .bars i{display:block;width:22px;height:2px;background:var(--white);transition:transform .3s}
+#menu-btn:hover .bars i:first-child{transform:translateX(3px)}
+
+/* hero */
+#hero{min-height:100vh;justify-content:center;align-items:flex-start;padding-top:12vh}
+#hero h1{font-size:clamp(58px,11vw,168px);color:var(--pure)}
+#hero h1 .w{display:inline-block;overflow:hidden;vertical-align:top}
+#hero h1 .w span{display:inline-block;transform:translateY(110%)}
+#hero h1 .accent{color:var(--crimson)}
+#hero h1 .accent-b{color:var(--blue)}
+.hero-sub{max-width:520px;margin-top:28px;color:var(--chrome);font-size:clamp(15px,1.4vw,18px);line-height:1.65}
+.cta-row{display:flex;gap:16px;margin-top:38px;flex-wrap:wrap}
+.btn{font-family:var(--mono);font-size:13px;letter-spacing:.22em;text-transform:uppercase;padding:18px 30px;border:1px solid transparent;position:relative;overflow:hidden;transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s}
+.btn-solid{background:var(--crimson);color:var(--pure)}
+.btn-solid:hover{transform:translateY(-3px);box-shadow:0 14px 34px rgba(226,59,59,.35)}
+.btn-ghost{border-color:rgba(201,205,212,.35);color:var(--white)}
+.btn-ghost:hover{border-color:var(--blue);transform:translateY(-3px);box-shadow:0 14px 34px rgba(46,95,216,.25)}
+.scroll-ind{position:absolute;bottom:34px;left:6vw;display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:11px;letter-spacing:.3em;color:var(--gun);text-transform:uppercase}
+.scroll-ind .line{width:1px;height:44px;background:var(--gun);position:relative;overflow:hidden}
+.scroll-ind .line::after{content:"";position:absolute;left:0;top:-50%;width:100%;height:50%;background:var(--crimson);animation:drop 1.8s cubic-bezier(.65,0,.35,1) infinite}
+@keyframes drop{to{top:110%}}
+
+/* shop story */
+#shop .story-line{font-family:var(--anton);font-size:clamp(34px,5.6vw,84px);text-transform:uppercase;line-height:1.02;max-width:14ch}
+#shop .story-line em{font-style:normal;position:relative;white-space:nowrap}
+#shop .story-line em::after{content:"";position:absolute;left:0;bottom:6%;height:.14em;width:0;background:var(--crimson);z-index:-1}
+#shop .story-line em.u-blue::after{background:var(--blue)}
+#shop p{max-width:460px;color:var(--chrome);line-height:1.75;margin-top:26px;font-size:15.5px}
+.spec-chips{display:flex;gap:10px;margin-top:30px;flex-wrap:wrap}
+.chip{font-family:var(--mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--chrome);border:1px solid rgba(201,205,212,.22);padding:9px 14px;background:rgba(19,19,24,.5)}
+.chip b{color:var(--crimson);font-weight:500}
+
+/* services */
+#services h2{font-size:clamp(44px,7vw,110px);margin-bottom:8px}
+#services .sec-sub{font-family:var(--mono);font-size:12px;letter-spacing:.3em;color:var(--gun);text-transform:uppercase;margin-bottom:54px}
+.svc-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;max-width:1080px}
+.svc{position:relative;background:linear-gradient(160deg,var(--steel),var(--steel-2));border:1px solid rgba(201,205,212,.14);padding:38px 32px 34px;overflow:hidden;transition:transform .45s cubic-bezier(.2,.8,.2,1)}
+.svc::before{content:"";position:absolute;inset:0;padding:1px;background:conic-gradient(from var(--a,0deg),var(--crimson),var(--blue),transparent 30%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:0;transition:opacity .4s}
+.svc:hover{transform:translateY(-6px)}
+.svc:hover::before{opacity:1;animation:sweep 2.6s linear infinite}
+@keyframes sweep{to{--a:360deg}}
+@property --a{syntax:'<angle>';initial-value:0deg;inherits:false}
+.svc .num{position:absolute;top:18px;right:22px;font-family:var(--mono);font-size:12px;letter-spacing:.3em;color:var(--gun)}
+.svc h3{font-family:var(--anton);font-size:clamp(24px,2.6vw,36px);text-transform:uppercase;letter-spacing:.02em;margin-bottom:14px}
+.svc h3 i{font-style:normal;color:var(--crimson)}
+.svc:nth-child(even) h3 i{color:var(--blue)}
+.svc p{color:var(--chrome);font-size:14.5px;line-height:1.7;max-width:38ch}
+.svc .tag{display:inline-block;margin-top:22px;font-family:var(--mono);font-size:10.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--gun);border:1px solid rgba(201,205,212,.2);padding:7px 12px}
+.svc .glow{position:absolute;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(226,59,59,.22),transparent 65%);top:-70px;left:-60px;opacity:0;transition:opacity .5s}
+.svc:hover .glow{opacity:1}
+
+/* creed */
+#creed{align-items:flex-start}
+#creed .creed-line{font-family:var(--anton);font-size:clamp(52px,9.5vw,150px);text-transform:uppercase;line-height:.95;display:block}
+#creed .creed-line.c-red{color:var(--crimson)}
+#creed .creed-line.c-blue{color:var(--blue)}
+#creed .creed-line.c-ghost{color:transparent;-webkit-text-stroke:1.5px rgba(245,242,234,.5)}
+.creed-meta{display:flex;gap:34px;margin-top:44px;flex-wrap:wrap}
+.meta-item{font-family:var(--mono);font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--gun);display:flex;align-items:center;gap:10px}
+.meta-item::before{content:"";width:26px;height:1px;background:var(--gun)}
+
+/* cta */
+#cta{align-items:center;text-align:center;min-height:80vh}
+#cta .cta-stage{position:relative;width:min(760px,86vw);margin-bottom:44px}
+#cta .cta-plate{position:absolute;inset:12% 6% -4%;background:
+  radial-gradient(60% 70% at 50% 85%, rgba(226,59,59,.3), transparent 72%),
+  linear-gradient(180deg, rgba(46,95,216,.14), transparent 60%);border:1px solid rgba(201,205,212,.12)}
+#cta .cta-bike{position:relative;width:100%;filter:drop-shadow(0 34px 40px rgba(0,0,0,.65))}
+#cta h2{font-size:clamp(46px,7.4vw,112px)}
+#cta h2 i{font-style:normal;color:var(--crimson)}
+#cta .aud{max-width:520px;color:var(--chrome);line-height:1.7;margin-top:22px;font-size:15.5px}
+footer{position:relative;z-index:10;display:flex;justify-content:space-between;align-items:center;padding:34px 6vw;border-top:1px solid rgba(201,205,212,.12);font-family:var(--mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--gun);flex-wrap:wrap;gap:14px}
+footer .f-brand{display:flex;align-items:center;gap:10px}
+footer svg{width:26px;height:26px}
+
+/* menu */
+#menu{position:fixed;inset:0;z-index:60;background:rgba(11,11,13,.97);display:grid;grid-template-columns:1.2fr 1fr;align-items:center;padding:0 6vw;visibility:hidden;clip-path:inset(0 0 100% 0)}
+#menu .m-links{display:flex;flex-direction:column;gap:6px}
+#menu .m-link{font-family:var(--anton);font-size:clamp(40px,6.4vw,86px);text-transform:uppercase;line-height:1.06;color:var(--white);transition:color .3s,opacity .3s,transform .3s;transform:translateY(30px);opacity:0}
+#menu .m-links:hover .m-link{opacity:.28}
+#menu .m-links .m-link:hover{opacity:1;color:var(--crimson);transform:translateX(10px)!important}
+#menu .m-link .idx{font-family:var(--mono);font-size:12px;letter-spacing:.3em;color:var(--gun);vertical-align:super;margin-right:14px}
+#menu .m-preview{position:relative;justify-self:center;width:min(34vw,440px)}
+#menu .m-preview .p-plate{position:absolute;inset:22% -6% -8%;background:radial-gradient(60% 70% at 50% 85%, rgba(226,59,59,.3), transparent 72%);border:1px solid rgba(201,205,212,.14)}
+#menu .m-preview img{position:relative;width:112%;left:-6%;filter:drop-shadow(0 26px 30px rgba(0,0,0,.6));transition:opacity .35s}
+#menu .m-preview .p-label{position:absolute;bottom:-40px;left:0;font-family:var(--mono);font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--gun)}
+#menu-close{position:absolute;top:26px;right:4vw;width:52px;height:52px;border:1px solid rgba(201,205,212,.3);display:grid;place-items:center;transition:border-color .3s,transform .45s cubic-bezier(.2,.8,.2,1)}
+#menu-close:hover{border-color:var(--crimson);transform:rotate(90deg)}
+#menu-close .x{position:relative;width:20px;height:20px}
+#menu-close .x::before,#menu-close .x::after{content:"";position:absolute;top:50%;left:0;width:20px;height:2px;background:var(--white);transform-origin:center}
+#menu-close .x::before{transform:translateY(-50%) rotate(45deg)}
+#menu-close .x::after{transform:translateY(-50%) rotate(-45deg)}
+
+/* ---------- SIDE SCROLL CONTROL ---------- */
+#side-scroll{position:fixed;right:18px;top:50%;transform:translateY(-50%);z-index:45;display:flex;flex-direction:column;gap:10px}
+#side-scroll button{width:42px;height:42px;border-radius:50%;border:1px solid rgba(201,205,212,.25);background:rgba(11,11,13,.55);backdrop-filter:blur(6px);display:grid;place-items:center;color:var(--chrome);transition:border-color .3s,transform .3s,color .3s}
+#side-scroll button:hover{border-color:var(--crimson);color:var(--pure);transform:translateY(-2px)}
+#side-scroll svg{width:16px;height:16px}
+
+/* ---------- BOOKING MODAL ---------- */
+#booking-modal{position:fixed;inset:0;z-index:70;display:none;align-items:center;justify-content:center;padding:6vh 5vw;background:rgba(6,6,7,.78);backdrop-filter:blur(6px)}
+#booking-modal.open{display:flex}
+.bk-panel{position:relative;width:min(560px,100%);max-height:88vh;overflow-y:auto;background:linear-gradient(165deg,var(--steel),#0e0e12);border:1px solid rgba(201,205,212,.16);padding:38px 32px}
+.bk-panel h3{font-family:var(--anton);font-size:clamp(28px,4vw,38px);text-transform:uppercase;margin-bottom:6px}
+.bk-panel .bk-sub{font-family:var(--mono);font-size:11px;letter-spacing:.24em;color:var(--gun);text-transform:uppercase;margin-bottom:26px}
+.bk-close{position:absolute;top:20px;right:20px;width:36px;height:36px;border:1px solid rgba(201,205,212,.25);display:grid;place-items:center;transition:border-color .3s}
+.bk-close:hover{border-color:var(--crimson)}
+.bk-close .x{position:relative;width:14px;height:14px}
+.bk-close .x::before,.bk-close .x::after{content:"";position:absolute;top:50%;left:0;width:14px;height:2px;background:var(--white)}
+.bk-close .x::before{transform:rotate(45deg)}
+.bk-close .x::after{transform:rotate(-45deg)}
+.bk-field{margin-bottom:18px;display:flex;flex-direction:column;gap:8px}
+.bk-field label{font-family:var(--mono);font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--gun)}
+.bk-field input,.bk-field textarea{background:rgba(11,11,13,.6);border:1px solid rgba(201,205,212,.22);color:var(--white);padding:13px 14px;font-family:var(--body);font-size:14.5px;border-radius:2px}
+.bk-field input:focus,.bk-field textarea:focus{outline:none;border-color:var(--crimson)}
+.bk-field textarea{resize:vertical;min-height:90px}
+.bk-row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.bk-submit{width:100%;margin-top:6px;font-family:var(--mono);font-size:13px;letter-spacing:.22em;text-transform:uppercase;padding:16px;background:var(--crimson);color:var(--pure);border:0;transition:opacity .3s}
+.bk-submit:disabled{opacity:.5}
+.bk-status{margin-top:14px;font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-align:center;min-height:18px}
+.bk-status.ok{color:#6fe08a}
+.bk-status.err{color:var(--crimson)}
+@media (max-width:520px){.bk-row2{grid-template-columns:1fr}}
+
+/* reduced motion + mobile */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+@media (max-width:860px){
+  .svc-grid{grid-template-columns:1fr}
+  .build-grid{grid-template-columns:1fr;row-gap:110px;max-width:440px}
+  #menu{grid-template-columns:1fr}
+  #menu .m-preview{display:none}
+  .r1{width:74vw}.r2{width:64vw}
+  #timeline .tl-col{right:2vw;width:60vw}
+  .tl-entry{opacity:.1}
+  .section{padding:14vh 7vw}
+  .brand .b-sub{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- LAYER 0 : THE TIMELINE -->
+<div class="layer" id="timeline" aria-hidden="true">
+  <div class="tl-rail"></div>
+  <div class="tl-col" id="tl-col">
+    <div class="tl-entry"><div class="tl-year">1901</div><div class="tl-cap">First V-twins rumble to life</div></div>
+    <div class="tl-entry tl-red"><div class="tl-year">1910s</div><div class="tl-cap">Board track era — wood, speed, nerve</div></div>
+    <div class="tl-entry"><div class="tl-year">1920s</div><div class="tl-cap">Flat tanks, leather, open roads</div></div>
+    <div class="tl-entry tl-blue"><div class="tl-year">1936</div><div class="tl-cap">The overhead-valve age begins</div></div>
+    <div class="tl-entry"><div class="tl-year">1940s</div><div class="tl-cap">War bikes come home</div></div>
+    <div class="tl-entry tl-red"><div class="tl-year">1950s</div><div class="tl-cap">Bobbers born in backyards</div></div>
+    <div class="tl-entry"><div class="tl-year">1960s</div><div class="tl-cap">Choppers take the highway</div></div>
+    <div class="tl-entry tl-blue"><div class="tl-year">1969</div><div class="tl-cap">Two lanes, coast to coast</div></div>
+    <div class="tl-entry"><div class="tl-year">1970s</div><div class="tl-cap">The superbike arrives</div></div>
+    <div class="tl-entry tl-red"><div class="tl-year">1990s</div><div class="tl-cap">The custom scene goes pro</div></div>
+    <div class="tl-entry"><div class="tl-year">2000s</div><div class="tl-cap">The fab shop renaissance</div></div>
+    <div class="tl-entry tl-blue"><div class="tl-year">TODAY</div><div class="tl-cap">Your build rolls in</div></div>
+  </div>
+</div>
+
+<!-- LAYER 1-3 : TINT, AURORA, GRAIN -->
+<div class="layer" id="tint" aria-hidden="true"></div>
+<div class="layer" id="aurora" aria-hidden="true">
+  <div class="blob b-red"></div><div class="blob b-blue"></div><div class="blob b-white"></div>
+</div>
+<div class="layer" id="grain" aria-hidden="true"></div>
+
+<!-- LAYER 5 : THE RIDERS -->
+<div class="layer" id="riders" aria-hidden="true">
+  <div class="rider r1" id="rider1">
+    <div class="bob">
+      <div class="r-tag">IN THE <b>SHOP</b></div>
+      <img src="__IMG_v1__" alt="" width="900" height="448">
+      <div class="shadow"></div>
+    </div>
+  </div>
+  <div class="rider r2" id="rider2">
+    <div class="bob">
+      <div class="r-tag">ON THE <b>LIFT</b></div>
+      <img src="__IMG_bike2__" alt="" width="900" height="584">
+      <div class="shadow"></div>
+    </div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header id="site-head">
+  <a class="brand" href="#hero" data-nav>
+    __SUN_SVG__
+    <span><span class="b-txt">Rising Sun<br>Kustoms</span></span>
+  </a>
+  <button id="menu-btn" aria-label="Open menu"><span class="bars"><i></i><i></i><i></i></span> Menu</button>
+</header>
+
+<!-- CONTENT -->
+<main id="content">
+
+  <section class="section" id="hero">
+    <div class="eyebrow"><span class="dot"></span> Motorcycle repair · Welding · Custom fabrication</div>
+    <h1 aria-label="Ride in. Roll out stronger.">
+      <span class="w"><span>RIDE</span></span> <span class="w"><span class="accent">IN.</span></span><br>
+      <span class="w"><span>ROLL</span></span> <span class="w"><span>OUT</span></span><br>
+      <span class="w"><span class="accent-b">STRONGER.</span></span>
+    </h1>
+    <p class="hero-sub reveal">General maintenance, honest repair, certified welding, and one-off custom fabrication — done by hands that ride. Two builds are rolling through this page right now. Scroll and ride along.</p>
+    <div class="cta-row reveal">
+      <a class="btn btn-solid" href="#cta" data-nav>Book a repair</a>
+      <a class="btn btn-ghost" href="#builds" data-nav>See the builds</a>
+    </div>
+    <div class="scroll-ind"><span class="line"></span> Scroll to ride</div>
+  </section>
+
+  <section class="section" id="shop">
+    <div class="ghost-word" style="top:8%;left:-2%">WELD</div>
+    <div class="eyebrow reveal">The shop</div>
+    <div class="story-line reveal">One garage.<br><em>Two hands.</em><br><em class="u-blue">Zero shortcuts.</em></div>
+    <p class="reveal">Rising Sun Kustoms is a working shop, not a showroom. Engines get diagnosed, frames get welded, and every bike leaves better than it came in. If it rolls on two wheels, it belongs here.</p>
+    <div class="spec-chips reveal">
+      <span class="chip"><b>TIG</b> / MIG certified</span>
+      <span class="chip">All makes <b>welcome</b></span>
+      <span class="chip">Rider <b>owned</b></span>
+    </div>
+  </section>
+
+  <section class="section" id="services">
+    <div class="eyebrow reveal">What we do</div>
+    <h2 class="reveal">Four ways in.</h2>
+    <div class="sec-sub reveal">Pick your lane — or bring us the whole problem.</div>
+    <div class="svc-grid">
+      <article class="svc reveal">
+        <div class="glow"></div><span class="num">/ 01</span>
+        <h3>Mainten<i>ance</i></h3>
+        <p>Oil, tires, brakes, chains, tune-ups. The unglamorous work that keeps her running right — done on time, priced straight.</p>
+        <span class="tag">Keep it running</span>
+      </article>
+      <article class="svc reveal">
+        <div class="glow"></div><span class="num">/ 02</span>
+        <h3>Rep<i>air</i></h3>
+        <p>From a stubborn no-start to a full teardown. Real diagnostics, real parts, and a call before we touch anything expensive.</p>
+        <span class="tag">Fix it right</span>
+      </article>
+      <article class="svc reveal">
+        <div class="glow"></div><span class="num">/ 03</span>
+        <h3>Weld<i>ing</i></h3>
+        <p>TIG and MIG on steel, stainless, and aluminum. Frames, brackets, exhausts, cracked cases — beads you'll want to show off.</p>
+        <span class="tag">Welded strong</span>
+      </article>
+      <article class="svc reveal">
+        <div class="glow"></div><span class="num">/ 04</span>
+        <h3>Custom <i>fab</i></h3>
+        <p>One-off parts that don't exist until we make them. Sissy bars, mounts, fenders, whole rolling ideas — drawn, cut, welded, ridden.</p>
+        <span class="tag">Built from scratch</span>
+      </article>
+    </div>
+  </section>
+
+  <section class="section" id="creed">
+    <div class="ghost-word" style="bottom:4%;right:-4%">GRIT</div>
+    <div class="eyebrow reveal">The creed</div>
+    <span class="creed-line c-red reveal">Built American.</span>
+    <span class="creed-line c-ghost reveal">Welded strong.</span>
+    <span class="creed-line c-blue reveal">Ridden free.</span>
+    <div class="creed-meta reveal">
+      <span class="meta-item">Steel</span>
+      <span class="meta-item">Chrome</span>
+      <span class="meta-item">Grit</span>
+      <span class="meta-item">EST. under one rising sun</span>
+    </div>
+  </section>
+
+  <section class="section" id="cta">
+    <div class="cta-stage reveal">
+      <div class="cta-plate"></div>
+      <img class="cta-bike" src="__IMG_v1__" alt="Custom build at Rising Sun Kustoms" width="900" height="448">
+    </div>
+    <h2 class="reveal">Your bike. Our hands.<br><i>Let's ride.</i></h2>
+    <p class="aud reveal">For every rider who wants it fixed right, welded strong, or built from nothing — bring it by the shop and let's talk.</p>
+    <div class="cta-row reveal" style="justify-content:center">
+      <button class="btn btn-solid" id="open-booking" type="button">Book your slot</button>
+      <a class="btn btn-ghost" href="tel:+19086925942">Call the shop</a>
+    </div>
+  </section>
+
+  <footer>
+    <span class="f-brand">__SUN_SVG__ Rising Sun Kustoms</span>
+    <span>Repair · Welding · Custom Fab</span>
+    <span>© 2026 — Ride safe.</span>
+  </footer>
+</main>
+
+<!-- MENU -->
+<nav id="menu" aria-hidden="true">
+  <button id="menu-close" aria-label="Close menu"><span class="x"></span></button>
+  <div class="m-links">
+    <a class="m-link" href="#hero" data-nav data-prev="__IMG_v1__" data-plabel="Home"><span class="idx">01</span>Home</a>
+    <a class="m-link" href="#shop" data-nav data-prev="__IMG_bike2__" data-plabel="The shop"><span class="idx">02</span>The Shop</a>
+    <a class="m-link" href="#services" data-nav data-prev="__IMG_v1__" data-plabel="Welding & fab"><span class="idx">03</span>What We Do</a>
+    <a class="m-link" href="#cta" data-nav data-prev="__IMG_bike2__" data-plabel="Book your slot"><span class="idx">04</span>Book</a>
+  </div>
+  <div class="m-preview">
+    <div class="p-plate"></div>
+    <img id="m-preview-img" src="__IMG_v1__" alt="" width="900" height="448">
+    <div class="p-label" id="m-preview-label">Home</div>
+  </div>
+</nav>
+
+<div id="side-scroll" aria-hidden="false">
+  <button id="scroll-top-btn" type="button" aria-label="Scroll to top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg></button>
+  <button id="scroll-bottom-btn" type="button" aria-label="Scroll to bottom"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
+</div>
+
+<div id="booking-modal" aria-hidden="true">
+  <div class="bk-panel">
+    <button class="bk-close" id="bk-close" type="button" aria-label="Close"><span class="x"></span></button>
+    <h3>Book Your Slot</h3>
+    <div class="bk-sub">Tell us what's going on — we'll confirm the time</div>
+    <form id="bk-form">
+      <div class="bk-field"><label for="bk-name">Name</label><input id="bk-name" name="full_name" type="text" required autocomplete="name"></div>
+      <div class="bk-field"><label for="bk-contact">Phone or email</label><input id="bk-contact" name="contact" type="text" required autocomplete="tel"></div>
+      <div class="bk-row2">
+        <div class="bk-field"><label for="bk-date">Preferred date</label><input id="bk-date" name="appointment_date" type="date" required></div>
+        <div class="bk-field"><label for="bk-time">Preferred time</label><input id="bk-time" name="appointment_time" type="time" required></div>
+      </div>
+      <div class="bk-field"><label for="bk-reason">Reason for your visit</label><textarea id="bk-reason" name="reason" required placeholder="Tell us what's wrong, or what you want built..."></textarea></div>
+      <button class="bk-submit" id="bk-submit" type="submit">Request appointment</button>
+      <div class="bk-status" id="bk-status"></div>
+    </form>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+<script>
+(function(){
+"use strict";
+
+/* ---- booking modal (works with or without GSAP/CDNs) ---- */
+var bkModal=document.getElementById('booking-modal'), bkOpenBtn=document.getElementById('open-booking'), bkCloseBtn=document.getElementById('bk-close');
+var __lenisRef=null;
+function openBooking(){ bkModal.classList.add('open'); bkModal.setAttribute('aria-hidden','false'); if(__lenisRef)__lenisRef.stop(); }
+function closeBooking(){ bkModal.classList.remove('open'); bkModal.setAttribute('aria-hidden','true'); if(__lenisRef)__lenisRef.start(); }
+if(bkOpenBtn)bkOpenBtn.addEventListener('click',openBooking);
+if(bkCloseBtn)bkCloseBtn.addEventListener('click',closeBooking);
+if(bkModal)bkModal.addEventListener('click',function(e){if(e.target===bkModal)closeBooking()});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&bkModal&&bkModal.classList.contains('open'))closeBooking()});
+
+/* ---- side scroll-to-top / scroll-to-bottom (works with or without GSAP) ---- */
+var stBtn=document.getElementById('scroll-top-btn'), sbBtn=document.getElementById('scroll-bottom-btn');
+function scrollToY(y){
+  if(__lenisRef){__lenisRef.scrollTo(y,{duration:1.4})}
+  else{window.scrollTo({top:y,behavior:'smooth'})}
+}
+if(stBtn)stBtn.addEventListener('click',function(){scrollToY(0)});
+if(sbBtn)sbBtn.addEventListener('click',function(){scrollToY(document.documentElement.scrollHeight)});
+
+/* ---- Supabase booking submit (works with or without GSAP) ---- */
+var SUPABASE_URL='https://vfmrqnnmhkjlljpvogdx.supabase.co';
+var SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZmbXJxbm5taGtqbGxqcHZvZ2R4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQzOTYyNDcsImV4cCI6MjA5OTk3MjI0N30.d2aCnhY0dney7l09O_C8YmPfsvf4BcAT_UphCdX5AmA';
+var bkForm=document.getElementById('bk-form'), bkStatus=document.getElementById('bk-status'), bkSubmit=document.getElementById('bk-submit');
+if(bkForm){
+  bkForm.addEventListener('submit',function(e){
+    e.preventDefault();
+    bkSubmit.disabled=true; bkSubmit.textContent='Sending...';
+    bkStatus.className='bk-status'; bkStatus.textContent='';
+    var payload={
+      full_name: document.getElementById('bk-name').value.trim(),
+      contact: document.getElementById('bk-contact').value.trim(),
+      appointment_date: document.getElementById('bk-date').value,
+      appointment_time: document.getElementById('bk-time').value,
+      reason: document.getElementById('bk-reason').value.trim()
+    };
+    fetch(SUPABASE_URL+'/rest/v1/appointments',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'apikey':SUPABASE_ANON_KEY,
+        'Authorization':'Bearer '+SUPABASE_ANON_KEY,
+        'Prefer':'return=minimal'
+      },
+      body:JSON.stringify(payload)
+    }).then(function(res){
+      if(res.ok){
+        bkStatus.className='bk-status ok';
+        bkStatus.textContent="Got it — we'll confirm your slot shortly.";
+        bkForm.reset();
+        setTimeout(closeBooking,1800);
+      }else{
+        return res.text().then(function(t){throw new Error(t||('HTTP '+res.status))});
+      }
+    }).catch(function(err){
+      bkStatus.className='bk-status err';
+      bkStatus.textContent="Something went wrong — please call the shop instead.";
+    }).finally(function(){
+      bkSubmit.disabled=false; bkSubmit.textContent='Request appointment';
+    });
+  });
+}
+
+if(!window.gsap){
+  document.querySelectorAll('.reveal,#hero h1 .w span').forEach(function(el){el.style.opacity=1;el.style.transform='none'});
+  var fr1=document.getElementById('rider1'),fr2=document.getElementById('rider2');
+  if(fr1){fr1.style.opacity=1;fr1.style.transform='translate('+(innerWidth*0.16)+'px,'+(innerHeight*0.34)+'px)'}
+  if(fr2){fr2.style.opacity=1;fr2.style.transform='translate('+(innerWidth*0.56)+'px,'+(innerHeight*0.56)+'px)'}
+  var mb=document.getElementById('menu-btn'),mc=document.getElementById('menu-close'),mn=document.getElementById('menu');
+  if(mb&&mn){mb.addEventListener('click',function(){mn.style.visibility='visible';mn.style.clipPath='inset(0 0 0% 0)';mn.querySelectorAll('.m-link').forEach(function(l){l.style.opacity=1;l.style.transform='none'})})}
+  if(mc&&mn){mc.addEventListener('click',function(){mn.style.visibility='hidden';mn.style.clipPath='inset(0 0 100% 0)'})}
+  return}
+gsap.registerPlugin(ScrollTrigger);
+var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+var mobile=window.matchMedia('(max-width:860px)').matches;
+
+/* ---- Lenis smooth scroll (graceful if CDN blocked) ---- */
+var lenis=null;
+try{
+  if(window.Lenis && !reduce){
+    lenis=new Lenis({lerp:0.09,smoothWheel:true});
+    lenis.on('scroll',ScrollTrigger.update);
+    gsap.ticker.add(function(t){lenis.raf(t*1000)});
+    gsap.ticker.lagSmoothing(0);
+  }
+}catch(e){lenis=null}
+window.__lenis=lenis; window.__ST=ScrollTrigger; __lenisRef=lenis;
+
+/* ---- anchor nav that respects lenis ---- */
+document.querySelectorAll('[data-nav]').forEach(function(a){
+  a.addEventListener('click',function(ev){
+    var id=a.getAttribute('href');
+    if(!id||id.charAt(0)!=='#')return;
+    ev.preventDefault();
+    closeMenu();
+    var target=document.querySelector(id);
+    if(!target)return;
+    if(lenis){lenis.scrollTo(target,{offset:0,duration:1.6})}
+    else{target.scrollIntoView({behavior:reduce?'auto':'smooth'})}
+  });
+});
+
+/* ---- hero intro: words assemble, riders enter ---- */
+var intro=gsap.timeline({defaults:{ease:'power3.out'}});
+intro.to('#hero h1 .w span',{y:0,duration:1.15,stagger:0.14},0.15)
+     .to('#hero .reveal',{opacity:1,y:0,duration:1.1,stagger:0.15},0.7);
+
+/* ---- rider path: enter, then ride DOWN the page with scroll ---- */
+var r1=document.getElementById('rider1'), r2=document.getElementById('rider2');
+function vw(p){return window.innerWidth*p/100}
+function vh(p){return window.innerHeight*p/100}
+function place(){
+  gsap.set(r1,{x:mobile?vw(-90):vw(-52),y:mobile?vh(30):vh(34),opacity:1});
+  gsap.set(r2,{x:vw(110),y:mobile?vh(58):vh(56),opacity:1});
+}
+place();
+intro.to(r1,{x:mobile?vw(10):vw(16),duration:1.7,ease:'power3.out'},0.5)
+     .to(r2,{x:mobile?vw(30):vw(56),duration:1.7,ease:'power3.out'},0.72);
+
+/* scrubbed journey — keyframed weave down the page */
+if(!reduce){
+  var ride=gsap.timeline({scrollTrigger:{trigger:'#content',start:'top top',end:'bottom bottom',scrub:1.2}});
+  /* shop: cross sides */
+  ride.to(r1,{x:mobile?vw(24):vw(48),y:vh(30),ease:'none'},0)
+      .to(r2,{x:mobile?vw(4):vw(6),y:vh(62),ease:'none'},0)
+  /* services: pull to edges, shrink */
+      .to(r1,{x:mobile?vw(-14):vw(-6),y:vh(64),scale:0.72,ease:'none'},0.32)
+      .to(r2,{x:mobile?vw(54):vw(72),y:vh(12),scale:0.66,ease:'none'},0.32)
+  /* creed: roar back through the middle */
+      .to(r1,{x:mobile?vw(6):vw(40),y:vh(52),scale:0.9,ease:'none'},0.64)
+      .to(r2,{x:mobile?vw(24):vw(14),y:vh(20),scale:0.85,ease:'none'},0.64)
+  /* cta: ride off the bottom of the page */
+      .to(r1,{x:mobile?vw(30):vw(64),y:vh(115),scale:0.95,ease:'none'},0.87)
+      .to(r2,{x:mobile?vw(-10):vw(2),y:vh(118),scale:0.9,ease:'none'},0.87);
+}else{
+  gsap.set(r1,{x:vw(16),y:vh(34),opacity:1});
+  gsap.set(r2,{x:vw(56),y:vh(56),opacity:1});
+}
+
+/* ---- timeline layer: slow parallax drift ---- */
+var tlCol=document.getElementById('tl-col');
+if(tlCol && !reduce){
+  var colH=tlCol.scrollHeight;
+  gsap.fromTo(tlCol,{y:vh(20)},{y:function(){return -(colH-vh(80))},ease:'none',
+    scrollTrigger:{trigger:'#content',start:'top top',end:'bottom bottom',scrub:1.6}});
+}
+
+/* ---- fade + rise reveals everywhere ---- */
+gsap.utils.toArray('.reveal').forEach(function(el){
+  if(el.closest('#hero'))return; /* hero handled by intro */
+  gsap.to(el,{opacity:1,y:0,duration:reduce?0:1.25,ease:'power3.out',
+    scrollTrigger:{trigger:el,start:'top 86%'}});
+});
+
+/* ---- ghost words gentle drift ---- */
+if(!reduce){gsap.utils.toArray('.ghost-word').forEach(function(el){
+  gsap.to(el,{y:-70,ease:'none',scrollTrigger:{trigger:el.parentElement,start:'top bottom',end:'bottom top',scrub:1.4}});
+});}
+
+/* ---- story highlight sweeps (class-based, animated by CSS) ---- */
+gsap.utils.toArray('#shop .story-line em').forEach(function(em,i){
+  ScrollTrigger.create({trigger:em,start:'top 82%',onEnter:function(){
+    em.classList.add('lit');
+  }});
+});
+
+/* ---- build cards 3D tilt (desktop only) ---- */
+if(!mobile && !reduce && window.matchMedia('(pointer:fine)').matches){
+  document.querySelectorAll('.card').forEach(function(card){
+    var inner=card.querySelector('.card-inner');
+    card.addEventListener('mousemove',function(e){
+      var r=card.getBoundingClientRect();
+      var px=(e.clientX-r.left)/r.width-0.5, py=(e.clientY-r.top)/r.height-0.5;
+      gsap.to(inner,{rotationY:px*9,rotationX:-py*8,transformPerspective:900,duration:0.5,ease:'power2.out'});
+    });
+    card.addEventListener('mouseleave',function(){
+      gsap.to(inner,{rotationX:0,rotationY:0,duration:0.8,ease:'power3.out'});
+    });
+  });
+}
+
+/* ---- menu ---- */
+var menu=document.getElementById('menu'), links=menu.querySelectorAll('.m-link');
+var pImg=document.getElementById('m-preview-img'), pLab=document.getElementById('m-preview-label');
+var menuOpen=false;
+function openMenu(){
+  if(menuOpen)return; menuOpen=true;
+  menu.setAttribute('aria-hidden','false');
+  if(lenis)lenis.stop();
+  gsap.set(menu,{visibility:'visible'});
+  gsap.to(menu,{clipPath:'inset(0% 0 0% 0)',duration:0.85,ease:'power4.inOut'});
+  gsap.to(links,{y:0,opacity:1,duration:0.9,stagger:0.07,delay:0.3,ease:'power3.out'});
+}
+function closeMenu(){
+  if(!menuOpen)return; menuOpen=false;
+  menu.setAttribute('aria-hidden','true');
+  gsap.to(links,{y:30,opacity:0,duration:0.35,ease:'power2.in'});
+  gsap.to(menu,{clipPath:'inset(0 0 100% 0)',duration:0.7,delay:0.12,ease:'power4.inOut',
+    onComplete:function(){gsap.set(menu,{visibility:'hidden'});if(lenis)lenis.start()}});
+}
+document.getElementById('menu-btn').addEventListener('click',openMenu);
+document.getElementById('menu-close').addEventListener('click',closeMenu);
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeMenu()});
+links.forEach(function(l){
+  l.addEventListener('mouseenter',function(){
+    var src=l.getAttribute('data-prev');
+    if(src && pImg.getAttribute('src')!==src){
+      gsap.to(pImg,{opacity:0,duration:0.18,onComplete:function(){
+        pImg.setAttribute('src',src);
+        pLab.textContent=l.getAttribute('data-plabel')||'';
+        gsap.to(pImg,{opacity:1,duration:0.3});
+      }});
+    }
+  });
+});
+
+/* ---- keep rider coords honest on resize + after fonts settle ---- */
+var rT; window.addEventListener('resize',function(){clearTimeout(rT);rT=setTimeout(function(){ScrollTrigger.refresh()},250)});
+window.addEventListener('load',function(){ScrollTrigger.refresh()});
+})();
+</script>
+<style>
+/* lit state for story underlines (added by JS) */
+#shop .story-line em.lit::after{width:100%;transition:width 1.1s cubic-bezier(.2,.8,.2,1)}
+</style>
+</body>
+</html>
