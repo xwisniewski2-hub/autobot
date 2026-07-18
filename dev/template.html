@@ -69,7 +69,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 
 /* ---------- CONTENT ---------- */
 #content{position:relative;z-index:10}
-.section{position:relative;min-height:auto;padding:8vh 6vw;display:flex;flex-direction:column;justify-content:center}
+.section{position:relative;min-height:auto;padding:calc(8vh + 96px) 6vw 8vh;display:flex;flex-direction:column;justify-content:center}
 .eyebrow{display:flex;align-items:center;gap:14px;font-family:var(--mono);font-size:12px;letter-spacing:.34em;text-transform:uppercase;color:var(--gun);margin-bottom:26px}
 .eyebrow::before{content:"";width:44px;height:1px;background:var(--crimson)}
 .eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--crimson);box-shadow:0 0 10px var(--crimson);animation:pulse 2.2s ease-in-out infinite}
@@ -81,6 +81,7 @@ h1,h2,.giant{font-family:var(--anton);font-weight:400;text-transform:uppercase;l
 
 /* header */
 #site-head{position:fixed;top:0;left:0;right:0;z-index:40;display:flex;justify-content:space-between;align-items:center;padding:20px 4vw;mix-blend-mode:normal}
+#site-head::before{content:"";position:absolute;inset:-4px -4vw auto -4vw;height:calc(100% + 24px);background:linear-gradient(180deg, rgba(11,11,13,.92) 60%, rgba(11,11,13,0));pointer-events:none;z-index:-1}
 .brand{display:flex;align-items:center;gap:14px;pointer-events:auto}
 .brand svg{width:40px;height:40px;display:block}
 .brand .b-txt{font-family:var(--anton);font-size:17px;letter-spacing:.08em;line-height:1.05;text-transform:uppercase}
@@ -92,7 +93,7 @@ h1,h2,.giant{font-family:var(--anton);font-weight:400;text-transform:uppercase;l
 #menu-btn:hover .bars i:first-child{transform:translateX(3px)}
 
 /* hero */
-#hero{min-height:100vh;justify-content:center;align-items:flex-start;padding-top:12vh}
+#hero{min-height:100vh;justify-content:center;align-items:flex-start;padding-top:max(12vh,140px)}
 #hero h1{font-size:clamp(58px,11vw,168px);color:var(--pure)}
 #hero h1 .w{display:inline-block;overflow:hidden;vertical-align:top}
 #hero h1 .w span{display:inline-block;transform:translateY(110%)}
@@ -119,6 +120,12 @@ h1,h2,.giant{font-family:var(--anton);font-weight:400;text-transform:uppercase;l
 .spec-chips{display:flex;gap:10px;margin-top:30px;flex-wrap:wrap}
 .chip{font-family:var(--mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--chrome);border:1px solid rgba(201,205,212,.22);padding:9px 14px;background:rgba(19,19,24,.5)}
 .chip b{color:var(--crimson);font-weight:500}
+
+/* quick quote (inline pricing selector on the main page) */
+.qq-box{display:flex;align-items:center;gap:18px;flex-wrap:wrap;max-width:760px;background:linear-gradient(160deg,var(--steel),var(--steel-2));border:1px solid rgba(201,205,212,.16);padding:26px 28px}
+.qq-box select{flex:1 1 260px;min-width:220px;background:rgba(11,11,13,.6);border:1px solid rgba(201,205,212,.24);color:var(--white);padding:14px 14px;font-family:var(--body);font-size:14.5px;border-radius:2px}
+.qq-price{font-family:var(--anton);font-size:26px;color:var(--crimson);min-width:90px;text-align:center}
+@media (max-width:560px){.qq-box{flex-direction:column;align-items:stretch}.qq-price{text-align:left}}
 
 /* services */
 #services h2{font-size:clamp(44px,7vw,110px);margin-bottom:8px}
@@ -201,7 +208,7 @@ footer svg{width:26px;height:26px}
 .bk-close .x::after{transform:rotate(-45deg)}
 .bk-field{margin-bottom:18px;display:flex;flex-direction:column;gap:8px}
 .bk-field label{font-family:var(--mono);font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--gun)}
-.bk-field input,.bk-field textarea{background:rgba(11,11,13,.6);border:1px solid rgba(201,205,212,.22);color:var(--white);padding:13px 14px;font-family:var(--body);font-size:14.5px;border-radius:2px}
+.bk-field input,.bk-field textarea,.bk-field select{background:rgba(11,11,13,.6);border:1px solid rgba(201,205,212,.22);color:var(--white);padding:13px 14px;font-family:var(--body);font-size:14.5px;border-radius:2px}
 .bk-field input:focus,.bk-field textarea:focus{outline:none;border-color:var(--crimson)}
 .bk-field textarea{resize:vertical;min-height:90px}
 .bk-row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
@@ -216,6 +223,7 @@ footer svg{width:26px;height:26px}
 .auth-tabs{display:flex;gap:0;margin-bottom:24px;border:1px solid rgba(201,205,212,.2)}
 .auth-tab{flex:1;padding:13px;font-family:var(--mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--gun);background:transparent;transition:background .3s,color .3s}
 .auth-tab.active{background:var(--crimson);color:var(--pure)}
+.auth-otp-note{background:rgba(111,224,138,.1);border:1px solid rgba(111,224,138,.35);color:#8fe8a8;padding:12px 14px;font-size:13px;line-height:1.5}
 #booking-modal,#auth-modal,#account-modal{position:fixed;inset:0;z-index:70;display:none;align-items:center;justify-content:center;padding:6vh 5vw;background:rgba(6,6,7,.78);backdrop-filter:blur(6px)}
 #booking-modal.open,#auth-modal.open,#account-modal.open{display:flex}
 .acct-panel{max-width:480px}
@@ -381,6 +389,17 @@ footer svg{width:26px;height:26px}
     </div>
   </section>
 
+  <section class="section" id="quick-quote">
+    <div class="eyebrow reveal">Quick quote</div>
+    <h2 class="reveal">What's the job?</h2>
+    <div class="sec-sub reveal">Pick a problem, see the price, book it — right here.</div>
+    <div class="qq-box reveal">
+      <select id="qq-service"><option value="" disabled selected>Loading services…</option></select>
+      <div class="qq-price" id="qq-price">—</div>
+      <button class="btn btn-solid" id="qq-book-btn" type="button">Book This Job</button>
+    </div>
+  </section>
+
   <section class="section" id="creed">
     <div class="ghost-word" style="bottom:4%;right:-4%">GRIT</div>
     <div class="eyebrow reveal">The creed</div>
@@ -469,11 +488,40 @@ footer svg{width:26px;height:26px}
       <button type="button" class="auth-tab" data-tab="signup">Sign Up</button>
     </div>
     <form id="auth-form">
-      <div class="bk-field auth-only-signup" style="display:none"><label for="auth-name">Name</label><input id="auth-name" type="text" autocomplete="name"></div>
-      <div class="bk-field"><label for="auth-email">Email</label><input id="auth-email" type="email" required autocomplete="email"></div>
-      <div class="bk-field"><label for="auth-password">Password</label><input id="auth-password" type="password" required autocomplete="current-password" minlength="6"></div>
+      <div class="auth-only-signup" style="display:none">
+        <div class="bk-row2">
+          <div class="bk-field"><label for="auth-fname">First Name</label><input id="auth-fname" type="text" autocomplete="given-name"></div>
+          <div class="bk-field"><label for="auth-lname">Last Name</label><input id="auth-lname" type="text" autocomplete="family-name"></div>
+        </div>
+      </div>
+      <div class="bk-field"><label for="auth-email">Email Address</label><input id="auth-email" type="email" required autocomplete="email"></div>
+      <div class="bk-field auth-only-signup auth-otp-note" style="display:none">A verification code will be sent to this email address.</div>
+      <div class="bk-field"><label for="auth-password" id="auth-pw-label">Password</label><input id="auth-password" type="password" required autocomplete="current-password" minlength="6"></div>
+      <div class="auth-only-signup" style="display:none">
+        <div class="bk-field"><label for="auth-phone">Phone Number</label><input id="auth-phone" type="tel" autocomplete="tel" placeholder="(555) 000-0000"></div>
+        <div class="acct-sub-h" style="margin-top:22px">Shipping Address <span style="color:var(--gun);font-weight:400;text-transform:none;letter-spacing:0">(optional)</span></div>
+        <div class="bk-field"><label for="auth-street">Street Address</label><input id="auth-street" type="text" autocomplete="address-line1"></div>
+        <div class="bk-field"><label for="auth-apt">Apt / Suite (optional)</label><input id="auth-apt" type="text" autocomplete="address-line2"></div>
+        <div class="bk-row2">
+          <div class="bk-field"><label for="auth-city">City</label><input id="auth-city" type="text" autocomplete="address-level2"></div>
+          <div class="bk-field"><label for="auth-state">State</label>
+            <select id="auth-state" autocomplete="address-level1">
+              <option value="">Select state</option>
+              <option>AL</option><option>AK</option><option>AZ</option><option>AR</option><option>CA</option><option>CO</option><option>CT</option><option>DE</option><option>FL</option><option>GA</option><option>HI</option><option>ID</option><option>IL</option><option>IN</option><option>IA</option><option>KS</option><option>KY</option><option>LA</option><option>ME</option><option>MD</option><option>MA</option><option>MI</option><option>MN</option><option>MS</option><option>MO</option><option>MT</option><option>NE</option><option>NV</option><option>NH</option><option>NJ</option><option>NM</option><option>NY</option><option>NC</option><option>ND</option><option>OH</option><option>OK</option><option>OR</option><option>PA</option><option>RI</option><option>SC</option><option>SD</option><option>TN</option><option>TX</option><option>UT</option><option>VT</option><option>VA</option><option>WA</option><option>WV</option><option>WI</option><option>WY</option>
+            </select>
+          </div>
+        </div>
+        <div class="bk-field"><label for="auth-zip">ZIP Code</label><input id="auth-zip" type="text" autocomplete="postal-code" inputmode="numeric"></div>
+      </div>
       <button class="bk-submit" id="auth-submit" type="submit">Sign In</button>
       <div class="bk-status" id="auth-status"></div>
+    </form>
+
+    <form id="auth-otp-form" style="display:none">
+      <div class="bk-sub" style="margin-bottom:16px">Enter the 6-digit code we emailed you</div>
+      <div class="bk-field"><label for="auth-otp-code">Verification Code</label><input id="auth-otp-code" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="6" required></div>
+      <button class="bk-submit" id="auth-otp-submit" type="submit">Verify & Continue</button>
+      <div class="bk-status" id="auth-otp-status"></div>
     </form>
   </div>
 </div>
@@ -585,12 +633,18 @@ if(acctLink){
 /* ---- auth tabs + form ---- */
 var authTabs=document.querySelectorAll('.auth-tab'), authForm=document.getElementById('auth-form');
 var authSubmit=document.getElementById('auth-submit'), authStatus=document.getElementById('auth-status');
-var authOnlySignup=document.querySelector('.auth-only-signup');
+var authOnlySignupEls=document.querySelectorAll('.auth-only-signup');
+var authPwInput=document.getElementById('auth-password'), authPwLabel=document.getElementById('auth-pw-label');
+var authOtpForm=document.getElementById('auth-otp-form'), authOtpStatus=document.getElementById('auth-otp-status'), authOtpSubmit=document.getElementById('auth-otp-submit');
+var pendingSignupEmail='';
 var authMode='signin';
 function openAuth(mode){
   authMode=mode||'signin';
-  authTabs.forEach(function(t){t.classList.toggle('active',t.dataset.atab===authMode||t.dataset.tab===authMode)});
-  authOnlySignup.style.display = authMode==='signup' ? 'flex' : 'none';
+  authForm.style.display='block'; authOtpForm.style.display='none';
+  authTabs.forEach(function(t){t.classList.toggle('active',t.dataset.tab===authMode)});
+  authOnlySignupEls.forEach(function(el){el.style.display = authMode==='signup' ? 'block' : 'none'});
+  authPwInput.minLength = authMode==='signup' ? 8 : 6;
+  authPwLabel.textContent = authMode==='signup' ? 'Password (min 8 chars)' : 'Password';
   authSubmit.textContent = authMode==='signup' ? 'Create Account' : 'Sign In';
   authStatus.textContent=''; authStatus.className='bk-status';
   modalOpen(authModal);
@@ -603,15 +657,29 @@ if(authForm){
     authSubmit.disabled=true; authStatus.className='bk-status'; authStatus.textContent='';
     var email=document.getElementById('auth-email').value.trim();
     var password=document.getElementById('auth-password').value;
-    var name=document.getElementById('auth-name').value.trim();
-    var task = authMode==='signup'
-      ? sb.auth.signUp({email:email, password:password, options:{data:{full_name:name}}})
-      : sb.auth.signInWithPassword({email:email, password:password});
+    var task;
+    if(authMode==='signup'){
+      var fname=document.getElementById('auth-fname').value.trim();
+      var lname=document.getElementById('auth-lname').value.trim();
+      var meta={
+        first_name:fname, last_name:lname, full_name:(fname+' '+lname).trim(),
+        phone:document.getElementById('auth-phone').value.trim(),
+        address_street:document.getElementById('auth-street').value.trim(),
+        address_apt:document.getElementById('auth-apt').value.trim(),
+        address_city:document.getElementById('auth-city').value.trim(),
+        address_state:document.getElementById('auth-state').value,
+        address_zip:document.getElementById('auth-zip').value.trim()
+      };
+      task = sb.auth.signUp({email:email, password:password, options:{data:meta}});
+    }else{
+      task = sb.auth.signInWithPassword({email:email, password:password});
+    }
     task.then(function(res){
       if(res.error){ throw res.error }
       if(authMode==='signup' && res.data && !res.data.session){
-        authStatus.className='bk-status ok';
-        authStatus.textContent='Check your email to confirm your account, then sign in.';
+        pendingSignupEmail = email;
+        authForm.style.display='none'; authOtpForm.style.display='block';
+        authOtpStatus.textContent=''; authOtpStatus.className='bk-status';
         authSubmit.disabled=false;
         return;
       }
@@ -620,6 +688,22 @@ if(authForm){
     }).catch(function(err){
       authStatus.className='bk-status err'; authStatus.textContent=err.message||'Something went wrong.';
       authSubmit.disabled=false;
+    });
+  });
+}
+if(authOtpForm){
+  authOtpForm.addEventListener('submit',function(e){
+    e.preventDefault();
+    if(!sb)return;
+    authOtpSubmit.disabled=true; authOtpStatus.className='bk-status'; authOtpStatus.textContent='';
+    var code=document.getElementById('auth-otp-code').value.trim();
+    sb.auth.verifyOtp({email:pendingSignupEmail, token:code, type:'signup'}).then(function(res){
+      if(res.error){ throw res.error }
+      authOtpStatus.className='bk-status ok'; authOtpStatus.textContent='Verified — welcome!';
+      setTimeout(function(){ modalClose(authModal); authForm.reset(); authOtpForm.reset(); authForm.style.display='block'; authOtpForm.style.display='none'; authOtpSubmit.disabled=false; },700);
+    }).catch(function(err){
+      authOtpStatus.className='bk-status err'; authOtpStatus.textContent=err.message||'Invalid or expired code.';
+      authOtpSubmit.disabled=false;
     });
   });
 }
@@ -677,28 +761,56 @@ function loadProfile(){
   });
 }
 
-/* ---- load services into the booking dropdown ---- */
+/* ---- load services into the booking dropdown + the on-page Quick Quote box ---- */
 var bkServiceSel = document.getElementById('bk-service');
-function loadServices(){
-  if(!sb||!bkServiceSel)return;
-  sb.from('services').select('*').eq('active',true).order('sort_order').then(function(res){
-    if(res.error||!res.data){bkServiceSel.innerHTML='<option value="">Unable to load services</option>';return}
-    servicesCache = res.data;
-    var byCat = {};
-    res.data.forEach(function(s){ (byCat[s.category]=byCat[s.category]||[]).push(s) });
-    var html='<option value="" disabled selected>Select a service…</option>';
-    Object.keys(byCat).forEach(function(cat){
-      html += '<optgroup label="'+cat+'">';
-      byCat[cat].forEach(function(s){
-        var priceLabel = s.price>0 ? ('$'+s.price.toFixed(2)) : 'Quote';
-        html += '<option value="'+s.id+'">'+s.name+' — '+priceLabel+'</option>';
-      });
-      html += '</optgroup>';
+var qqSel = document.getElementById('qq-service'), qqPrice = document.getElementById('qq-price'), qqBookBtn = document.getElementById('qq-book-btn');
+function buildServiceOptionsHtml(data, placeholder){
+  var byCat = {};
+  data.forEach(function(s){ (byCat[s.category]=byCat[s.category]||[]).push(s) });
+  var html='<option value="" disabled selected>'+placeholder+'</option>';
+  Object.keys(byCat).forEach(function(cat){
+    html += '<optgroup label="'+cat+'">';
+    byCat[cat].forEach(function(s){
+      var priceLabel = s.price>0 ? ('$'+s.price.toFixed(2)) : 'Quote';
+      html += '<option value="'+s.id+'">'+s.name+' — '+priceLabel+'</option>';
     });
-    bkServiceSel.innerHTML = html;
+    html += '</optgroup>';
+  });
+  return html;
+}
+function loadServices(){
+  if(!sb)return;
+  sb.from('services').select('*').eq('active',true).order('sort_order').then(function(res){
+    if(res.error||!res.data){
+      if(bkServiceSel)bkServiceSel.innerHTML='<option value="">Unable to load services</option>';
+      if(qqSel)qqSel.innerHTML='<option value="">Unable to load services</option>';
+      return;
+    }
+    servicesCache = res.data;
+    if(bkServiceSel)bkServiceSel.innerHTML = buildServiceOptionsHtml(res.data,'Select a service…');
+    if(qqSel)qqSel.innerHTML = buildServiceOptionsHtml(res.data,'Choose a problem…');
   });
 }
 loadServices();
+
+if(qqSel){
+  qqSel.addEventListener('change',function(){
+    var svc = servicesCache.find(function(s){return s.id===qqSel.value});
+    qqPrice.textContent = svc ? (svc.price>0 ? ('$'+svc.price.toFixed(2)) : 'Quote') : '—';
+  });
+}
+if(qqBookBtn){
+  qqBookBtn.addEventListener('click',function(){
+    if(!qqSel.value){ qqSel.focus(); return }
+    openBooking();
+    setTimeout(function(){
+      if(bkServiceSel){
+        bkServiceSel.value = qqSel.value;
+        bkServiceSel.dispatchEvent(new Event('change'));
+      }
+    },50);
+  });
+}
 
 /* ---- booking submit via supabase-js ---- */
 var bkForm=document.getElementById('bk-form'), bkStatus=document.getElementById('bk-status'), bkSubmit=document.getElementById('bk-submit');
