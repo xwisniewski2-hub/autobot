@@ -212,6 +212,41 @@ footer svg{width:26px;height:26px}
 .bk-status.err{color:var(--crimson)}
 @media (max-width:520px){.bk-row2{grid-template-columns:1fr}}
 
+/* ---------- AUTH / ACCOUNT ---------- */
+.auth-tabs{display:flex;gap:0;margin-bottom:24px;border:1px solid rgba(201,205,212,.2)}
+.auth-tab{flex:1;padding:13px;font-family:var(--mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--gun);background:transparent;transition:background .3s,color .3s}
+.auth-tab.active{background:var(--crimson);color:var(--pure)}
+#booking-modal,#auth-modal,#account-modal{position:fixed;inset:0;z-index:70;display:none;align-items:center;justify-content:center;padding:6vh 5vw;background:rgba(6,6,7,.78);backdrop-filter:blur(6px)}
+#booking-modal.open,#auth-modal.open,#account-modal.open{display:flex}
+.acct-panel{max-width:480px}
+.acct-sub-h{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gun);margin-bottom:14px}
+.acct-empty{color:var(--gun);font-size:13.5px;padding:14px 0}
+.acct-appt{border:1px solid rgba(201,205,212,.16);padding:14px 16px;margin-bottom:10px;font-size:13.5px}
+.acct-appt .aa-top{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--gun);text-transform:uppercase;margin-bottom:6px}
+.acct-appt .aa-svc{color:var(--white);font-weight:600}
+.acct-appt .aa-status{padding:2px 8px;border-radius:2px;font-size:10px}
+.aa-status.pending{background:rgba(226,59,59,.18);color:#ff9d9d}
+.aa-status.confirmed{background:rgba(46,95,216,.22);color:#9db8ff}
+.aa-status.completed{background:rgba(111,224,138,.18);color:#6fe08a}
+.aa-status.cancelled{background:rgba(138,143,152,.22);color:var(--gun)}
+
+/* ---------- ADMIN PANEL ---------- */
+#admin-modal{position:fixed;inset:0;z-index:75;display:none;background:rgba(6,6,7,.92);backdrop-filter:blur(6px);padding:5vh 4vw}
+#admin-modal.open{display:block}
+.admin-panel{max-width:1100px;margin:0 auto;background:linear-gradient(165deg,var(--steel),#0e0e12);border:1px solid rgba(201,205,212,.16);max-height:90vh;display:flex;flex-direction:column}
+.admin-head{display:flex;justify-content:space-between;align-items:center;padding:28px 32px 0}
+.admin-head h3{font-family:var(--anton);font-size:clamp(26px,3.6vw,34px);text-transform:uppercase}
+.admin-tabs{display:flex;gap:0;margin:20px 32px 0;border:1px solid rgba(201,205,212,.2)}
+.admin-tab{flex:1;padding:12px;font-family:var(--mono);font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--gun);background:transparent}
+.admin-tab.active{background:var(--blue);color:var(--pure)}
+.admin-pane{padding:24px 32px 32px;overflow-y:auto}
+.adm-row{display:grid;grid-template-columns:1fr 1fr 1.4fr 1fr 1fr;gap:10px;align-items:center;border:1px solid rgba(201,205,212,.14);padding:12px 14px;margin-bottom:8px;font-size:12.5px}
+.adm-row .adm-label{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;color:var(--gun);text-transform:uppercase;display:block;margin-bottom:2px}
+.adm-row select,.adm-row input{width:100%;background:rgba(11,11,13,.6);border:1px solid rgba(201,205,212,.22);color:var(--white);padding:8px 10px;font-family:var(--body);font-size:12.5px}
+.adm-row .adm-del{background:transparent;color:var(--crimson);font-family:var(--mono);font-size:10px;letter-spacing:.15em;text-transform:uppercase;border:1px solid var(--crimson);padding:8px;text-align:center}
+@media (max-width:820px){.adm-row{grid-template-columns:1fr 1fr}}
+.admin-add-service{border-top:1px solid rgba(201,205,212,.16);padding-top:18px;margin-top:20px}
+
 /* reduced motion + mobile */
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
@@ -388,6 +423,7 @@ footer svg{width:26px;height:26px}
     <a class="m-link" href="#shop" data-nav data-prev="__IMG_bike2__" data-plabel="The shop"><span class="idx">02</span>The Shop</a>
     <a class="m-link" href="#services" data-nav data-prev="__IMG_v1__" data-plabel="Welding & fab"><span class="idx">03</span>What We Do</a>
     <a class="m-link" href="#cta" data-nav data-prev="__IMG_bike2__" data-plabel="Book your slot"><span class="idx">04</span>Book</a>
+    <a class="m-link" href="#" id="account-link" data-prev="__IMG_v1__" data-plabel="Your account"><span class="idx">05</span><span id="account-link-text">Sign In / Sign Up</span></a>
   </div>
   <div class="m-preview">
     <div class="p-plate"></div>
@@ -405,21 +441,89 @@ footer svg{width:26px;height:26px}
   <div class="bk-panel">
     <button class="bk-close" id="bk-close" type="button" aria-label="Close"><span class="x"></span></button>
     <h3>Book Your Slot</h3>
-    <div class="bk-sub">Tell us what's going on — we'll confirm the time</div>
+    <div class="bk-sub">Pick a job, pick a time — we'll confirm it</div>
     <form id="bk-form">
       <div class="bk-field"><label for="bk-name">Name</label><input id="bk-name" name="full_name" type="text" required autocomplete="name"></div>
       <div class="bk-field"><label for="bk-contact">Phone or email</label><input id="bk-contact" name="contact" type="text" required autocomplete="tel"></div>
+      <div class="bk-field">
+        <label for="bk-service">What do you need?</label>
+        <select id="bk-service" name="service_id" required><option value="" disabled selected>Loading services…</option></select>
+      </div>
       <div class="bk-row2">
         <div class="bk-field"><label for="bk-date">Preferred date</label><input id="bk-date" name="appointment_date" type="date" required></div>
         <div class="bk-field"><label for="bk-time">Preferred time</label><input id="bk-time" name="appointment_time" type="time" required></div>
       </div>
-      <div class="bk-field"><label for="bk-reason">Reason for your visit</label><textarea id="bk-reason" name="reason" required placeholder="Tell us what's wrong, or what you want built..."></textarea></div>
+      <div class="bk-field"><label for="bk-reason">Tell us more (optional)</label><textarea id="bk-reason" name="notes" placeholder="Any extra detail — write it in your own words..."></textarea></div>
       <button class="bk-submit" id="bk-submit" type="submit">Request appointment</button>
       <div class="bk-status" id="bk-status"></div>
     </form>
   </div>
 </div>
 
+<!-- AUTH MODAL -->
+<div id="auth-modal" aria-hidden="true">
+  <div class="bk-panel">
+    <button class="bk-close" id="auth-close" type="button" aria-label="Close"><span class="x"></span></button>
+    <div class="auth-tabs">
+      <button type="button" class="auth-tab active" data-tab="signin">Sign In</button>
+      <button type="button" class="auth-tab" data-tab="signup">Sign Up</button>
+    </div>
+    <form id="auth-form">
+      <div class="bk-field auth-only-signup" style="display:none"><label for="auth-name">Name</label><input id="auth-name" type="text" autocomplete="name"></div>
+      <div class="bk-field"><label for="auth-email">Email</label><input id="auth-email" type="email" required autocomplete="email"></div>
+      <div class="bk-field"><label for="auth-password">Password</label><input id="auth-password" type="password" required autocomplete="current-password" minlength="6"></div>
+      <button class="bk-submit" id="auth-submit" type="submit">Sign In</button>
+      <div class="bk-status" id="auth-status"></div>
+    </form>
+  </div>
+</div>
+
+<!-- MY ACCOUNT PANEL -->
+<div id="account-modal" aria-hidden="true">
+  <div class="bk-panel acct-panel">
+    <button class="bk-close" id="account-close" type="button" aria-label="Close"><span class="x"></span></button>
+    <h3>My Account</h3>
+    <div class="bk-sub" id="acct-email"></div>
+    <div id="acct-admin-row" style="display:none;margin-bottom:22px">
+      <button class="btn btn-solid" id="open-admin" type="button" style="width:100%">Open Admin Panel</button>
+    </div>
+    <div class="acct-sub-h">My Appointments</div>
+    <div id="acct-appts"><div class="acct-empty">Loading…</div></div>
+    <button class="btn btn-ghost" id="sign-out-btn" type="button" style="width:100%;margin-top:22px">Sign Out</button>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="admin-modal" aria-hidden="true">
+  <div class="admin-panel">
+    <div class="admin-head">
+      <h3>Shop Admin</h3>
+      <button class="bk-close" id="admin-close" type="button" aria-label="Close"><span class="x"></span></button>
+    </div>
+    <div class="admin-tabs">
+      <button type="button" class="admin-tab active" data-atab="bookings">Bookings</button>
+      <button type="button" class="admin-tab" data-atab="services">Services & Pricing</button>
+    </div>
+    <div id="admin-bookings" class="admin-pane"><div class="acct-empty">Loading…</div></div>
+    <div id="admin-services" class="admin-pane" style="display:none">
+      <div id="admin-services-list"><div class="acct-empty">Loading…</div></div>
+      <div class="admin-add-service">
+        <div class="bk-sub" style="margin:18px 0 10px">Add a new service</div>
+        <div class="bk-row2">
+          <div class="bk-field"><label>Category</label><input id="new-svc-category" type="text" placeholder="e.g. Maintenance"></div>
+          <div class="bk-field"><label>Name</label><input id="new-svc-name" type="text" placeholder="e.g. Oil Change"></div>
+        </div>
+        <div class="bk-row2">
+          <div class="bk-field"><label>Price ($)</label><input id="new-svc-price" type="number" step="0.01" min="0" placeholder="0.00"></div>
+          <div class="bk-field"><label>Duration (min)</label><input id="new-svc-duration" type="number" step="5" min="5" placeholder="60"></div>
+        </div>
+        <button class="bk-submit" id="add-svc-btn" type="button">Add Service</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
@@ -435,7 +539,6 @@ function closeBooking(){ bkModal.classList.remove('open'); bkModal.setAttribute(
 if(bkOpenBtn)bkOpenBtn.addEventListener('click',openBooking);
 if(bkCloseBtn)bkCloseBtn.addEventListener('click',closeBooking);
 if(bkModal)bkModal.addEventListener('click',function(e){if(e.target===bkModal)closeBooking()});
-document.addEventListener('keydown',function(e){if(e.key==='Escape'&&bkModal&&bkModal.classList.contains('open'))closeBooking()});
 
 /* ---- side scroll-to-top / scroll-to-bottom (works with or without GSAP) ---- */
 var stBtn=document.getElementById('scroll-top-btn'), sbBtn=document.getElementById('scroll-bottom-btn');
@@ -446,45 +549,284 @@ function scrollToY(y){
 if(stBtn)stBtn.addEventListener('click',function(){scrollToY(0)});
 if(sbBtn)sbBtn.addEventListener('click',function(){scrollToY(document.documentElement.scrollHeight)});
 
-/* ---- Supabase booking submit (works with or without GSAP) ---- */
+/* ============ SUPABASE: accounts, booking, admin ============ */
 var SUPABASE_URL='https://vfmrqnnmhkjlljpvogdx.supabase.co';
 var SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZmbXJxbm5taGtqbGxqcHZvZ2R4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQzOTYyNDcsImV4cCI6MjA5OTk3MjI0N30.d2aCnhY0dney7l09O_C8YmPfsvf4BcAT_UphCdX5AmA';
+var sb = (window.supabase && window.supabase.createClient) ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+var currentSession = null, currentProfile = null, servicesCache = [];
+
+/* generic modal open/close helpers for the new modals */
+function modalOpen(el){ if(!el)return; el.classList.add('open'); el.setAttribute('aria-hidden','false'); if(__lenisRef)__lenisRef.stop(); }
+function modalClose(el){ if(!el)return; el.classList.remove('open'); el.setAttribute('aria-hidden','true'); if(__lenisRef)__lenisRef.start(); }
+
+var authModal=document.getElementById('auth-modal'), authClose=document.getElementById('auth-close');
+var accountModal=document.getElementById('account-modal'), accountClose=document.getElementById('account-close');
+var adminModal=document.getElementById('admin-modal'), adminClose=document.getElementById('admin-close');
+[[authModal,authClose],[accountModal,accountClose],[adminModal,adminClose]].forEach(function(pair){
+  if(pair[1])pair[1].addEventListener('click',function(){modalClose(pair[0])});
+  if(pair[0])pair[0].addEventListener('click',function(e){if(e.target===pair[0])modalClose(pair[0])});
+});
+document.addEventListener('keydown',function(e){
+  if(e.key!=='Escape')return;
+  [bkModal,authModal,accountModal].forEach(function(m){if(m&&m.classList.contains('open'))modalClose(m)});
+  if(adminModal&&adminModal.classList.contains('open'))modalClose(adminModal);
+});
+
+/* ---- account link in menu ---- */
+var acctLink=document.getElementById('account-link'), acctLinkText=document.getElementById('account-link-text');
+if(acctLink){
+  acctLink.addEventListener('click',function(e){
+    e.preventDefault();
+    if(window.__closeMenu)window.__closeMenu();
+    if(currentSession){ openAccountPanel() } else { openAuth('signin') }
+  });
+}
+
+/* ---- auth tabs + form ---- */
+var authTabs=document.querySelectorAll('.auth-tab'), authForm=document.getElementById('auth-form');
+var authSubmit=document.getElementById('auth-submit'), authStatus=document.getElementById('auth-status');
+var authOnlySignup=document.querySelector('.auth-only-signup');
+var authMode='signin';
+function openAuth(mode){
+  authMode=mode||'signin';
+  authTabs.forEach(function(t){t.classList.toggle('active',t.dataset.atab===authMode||t.dataset.tab===authMode)});
+  authOnlySignup.style.display = authMode==='signup' ? 'flex' : 'none';
+  authSubmit.textContent = authMode==='signup' ? 'Create Account' : 'Sign In';
+  authStatus.textContent=''; authStatus.className='bk-status';
+  modalOpen(authModal);
+}
+authTabs.forEach(function(t){t.addEventListener('click',function(){openAuth(t.dataset.tab)})});
+if(authForm){
+  authForm.addEventListener('submit',function(e){
+    e.preventDefault();
+    if(!sb){authStatus.className='bk-status err';authStatus.textContent='Accounts are unavailable right now.';return}
+    authSubmit.disabled=true; authStatus.className='bk-status'; authStatus.textContent='';
+    var email=document.getElementById('auth-email').value.trim();
+    var password=document.getElementById('auth-password').value;
+    var name=document.getElementById('auth-name').value.trim();
+    var task = authMode==='signup'
+      ? sb.auth.signUp({email:email, password:password, options:{data:{full_name:name}}})
+      : sb.auth.signInWithPassword({email:email, password:password});
+    task.then(function(res){
+      if(res.error){ throw res.error }
+      if(authMode==='signup' && res.data && !res.data.session){
+        authStatus.className='bk-status ok';
+        authStatus.textContent='Check your email to confirm your account, then sign in.';
+        authSubmit.disabled=false;
+        return;
+      }
+      authStatus.className='bk-status ok'; authStatus.textContent='Welcome!';
+      setTimeout(function(){ modalClose(authModal); authForm.reset(); authSubmit.disabled=false; },700);
+    }).catch(function(err){
+      authStatus.className='bk-status err'; authStatus.textContent=err.message||'Something went wrong.';
+      authSubmit.disabled=false;
+    });
+  });
+}
+
+/* ---- account panel ---- */
+function openAccountPanel(){
+  document.getElementById('acct-email').textContent = currentSession ? currentSession.user.email : '';
+  document.getElementById('acct-admin-row').style.display = (currentProfile && currentProfile.role==='admin') ? 'block' : 'none';
+  loadMyAppointments();
+  modalOpen(accountModal);
+}
+function loadMyAppointments(){
+  var box=document.getElementById('acct-appts');
+  if(!sb||!currentSession){box.innerHTML='<div class="acct-empty">Sign in to see your appointments.</div>';return}
+  box.innerHTML='<div class="acct-empty">Loading…</div>';
+  sb.from('appointments').select('*, services(name,category)').eq('user_id',currentSession.user.id).order('appointment_date',{ascending:false})
+    .then(function(res){
+      if(res.error||!res.data||!res.data.length){box.innerHTML='<div class="acct-empty">No appointments yet — book your first slot.</div>';return}
+      box.innerHTML = res.data.map(function(a){
+        var svc = a.services ? a.services.name : 'Service';
+        return '<div class="acct-appt"><div class="aa-top"><span>'+a.appointment_date+' · '+a.appointment_time+'</span><span class="aa-status '+a.status+'">'+a.status+'</span></div><div class="aa-svc">'+svc+'</div>'+(a.notes?'<div style="color:var(--gun);margin-top:4px">'+a.notes+'</div>':'')+'</div>';
+      }).join('');
+    });
+}
+var signOutBtn=document.getElementById('sign-out-btn');
+if(signOutBtn)signOutBtn.addEventListener('click',function(){ if(sb)sb.auth.signOut(); modalClose(accountModal); });
+var openAdminBtn=document.getElementById('open-admin');
+if(openAdminBtn)openAdminBtn.addEventListener('click',function(){ modalClose(accountModal); openAdminPanel(); });
+
+/* ---- react to auth state ---- */
+function refreshAuthUI(){
+  if(currentSession){
+    acctLinkText.textContent = 'My Account';
+  }else{
+    acctLinkText.textContent = 'Sign In / Sign Up';
+    currentProfile = null;
+  }
+}
+if(sb){
+  sb.auth.getSession().then(function(res){
+    currentSession = res.data.session;
+    if(currentSession)loadProfile();
+    refreshAuthUI();
+  });
+  sb.auth.onAuthStateChange(function(_evt, session){
+    currentSession = session;
+    if(currentSession)loadProfile(); else currentProfile=null;
+    refreshAuthUI();
+  });
+}
+function loadProfile(){
+  if(!sb||!currentSession)return;
+  sb.from('profiles').select('*').eq('id',currentSession.user.id).single().then(function(res){
+    if(!res.error)currentProfile = res.data;
+  });
+}
+
+/* ---- load services into the booking dropdown ---- */
+var bkServiceSel = document.getElementById('bk-service');
+function loadServices(){
+  if(!sb||!bkServiceSel)return;
+  sb.from('services').select('*').eq('active',true).order('sort_order').then(function(res){
+    if(res.error||!res.data){bkServiceSel.innerHTML='<option value="">Unable to load services</option>';return}
+    servicesCache = res.data;
+    var byCat = {};
+    res.data.forEach(function(s){ (byCat[s.category]=byCat[s.category]||[]).push(s) });
+    var html='<option value="" disabled selected>Select a service…</option>';
+    Object.keys(byCat).forEach(function(cat){
+      html += '<optgroup label="'+cat+'">';
+      byCat[cat].forEach(function(s){
+        var priceLabel = s.price>0 ? ('$'+s.price.toFixed(2)) : 'Quote';
+        html += '<option value="'+s.id+'">'+s.name+' — '+priceLabel+'</option>';
+      });
+      html += '</optgroup>';
+    });
+    bkServiceSel.innerHTML = html;
+  });
+}
+loadServices();
+
+/* ---- booking submit via supabase-js ---- */
 var bkForm=document.getElementById('bk-form'), bkStatus=document.getElementById('bk-status'), bkSubmit=document.getElementById('bk-submit');
 if(bkForm){
   bkForm.addEventListener('submit',function(e){
     e.preventDefault();
+    if(!sb){bkStatus.className='bk-status err';bkStatus.textContent='Booking is unavailable right now — please call the shop.';return}
     bkSubmit.disabled=true; bkSubmit.textContent='Sending...';
     bkStatus.className='bk-status'; bkStatus.textContent='';
+    var serviceId = bkServiceSel.value;
+    var svc = servicesCache.find(function(s){return s.id===serviceId});
     var payload={
       full_name: document.getElementById('bk-name').value.trim(),
       contact: document.getElementById('bk-contact').value.trim(),
       appointment_date: document.getElementById('bk-date').value,
       appointment_time: document.getElementById('bk-time').value,
-      reason: document.getElementById('bk-reason').value.trim()
+      notes: document.getElementById('bk-reason').value.trim() || null,
+      service_id: serviceId || null,
+      price_at_booking: svc ? svc.price : null,
+      user_id: currentSession ? currentSession.user.id : null
     };
-    fetch(SUPABASE_URL+'/rest/v1/appointments',{
-      method:'POST',
-      headers:{
-        'Content-Type':'application/json',
-        'apikey':SUPABASE_ANON_KEY,
-        'Authorization':'Bearer '+SUPABASE_ANON_KEY,
-        'Prefer':'return=minimal'
-      },
-      body:JSON.stringify(payload)
-    }).then(function(res){
-      if(res.ok){
-        bkStatus.className='bk-status ok';
-        bkStatus.textContent="Got it — we'll confirm your slot shortly.";
-        bkForm.reset();
-        setTimeout(closeBooking,1800);
-      }else{
-        return res.text().then(function(t){throw new Error(t||('HTTP '+res.status))});
-      }
+    sb.from('appointments').insert(payload).then(function(res){
+      if(res.error){ throw res.error }
+      bkStatus.className='bk-status ok';
+      bkStatus.textContent="Got it — we'll confirm your slot shortly.";
+      bkForm.reset();
+      setTimeout(closeBooking,1800);
     }).catch(function(err){
       bkStatus.className='bk-status err';
       bkStatus.textContent="Something went wrong — please call the shop instead.";
     }).finally(function(){
       bkSubmit.disabled=false; bkSubmit.textContent='Request appointment';
+    });
+  });
+}
+
+/* ============ ADMIN PANEL ============ */
+var adminTabs=document.querySelectorAll('.admin-tab');
+adminTabs.forEach(function(t){
+  t.addEventListener('click',function(){
+    adminTabs.forEach(function(x){x.classList.remove('active')});
+    t.classList.add('active');
+    document.getElementById('admin-bookings').style.display = t.dataset.atab==='bookings' ? 'block' : 'none';
+    document.getElementById('admin-services').style.display = t.dataset.atab==='services' ? 'block' : 'none';
+  });
+});
+function openAdminPanel(){
+  if(!currentProfile || currentProfile.role!=='admin'){ return }
+  modalOpen(adminModal);
+  loadAdminBookings();
+  loadAdminServices();
+}
+function loadAdminBookings(){
+  var box=document.getElementById('admin-bookings');
+  box.innerHTML='<div class="acct-empty">Loading…</div>';
+  sb.from('appointments').select('*, services(name)').order('appointment_date',{ascending:false}).then(function(res){
+    if(res.error||!res.data||!res.data.length){box.innerHTML='<div class="acct-empty">No bookings yet.</div>';return}
+    box.innerHTML = res.data.map(function(a){
+      var svc = a.services ? a.services.name : '—';
+      return '<div class="adm-row" data-id="'+a.id+'">'+
+        '<div><span class="adm-label">When</span>'+a.appointment_date+' '+a.appointment_time+'</div>'+
+        '<div><span class="adm-label">Customer</span>'+(a.full_name||'')+'<br><span style="color:var(--gun)">'+(a.contact||'')+'</span></div>'+
+        '<div><span class="adm-label">Service</span>'+svc+(a.price_at_booking?(' — $'+Number(a.price_at_booking).toFixed(2)):'')+(a.notes?('<br><span style="color:var(--gun)">'+a.notes+'</span>'):'')+'</div>'+
+        '<div><span class="adm-label">Status</span><select class="adm-status-sel">'+
+          ['pending','confirmed','completed','cancelled'].map(function(s){return '<option value="'+s+'"'+(s===a.status?' selected':'')+'>'+s+'</option>'}).join('')+
+        '</select></div>'+
+        '<div><button class="adm-del" type="button">Delete</button></div>'+
+      '</div>';
+    }).join('');
+    box.querySelectorAll('.adm-row').forEach(function(row){
+      var id=row.dataset.id;
+      row.querySelector('.adm-status-sel').addEventListener('change',function(){
+        sb.from('appointments').update({status:this.value}).eq('id',id).then(function(){});
+      });
+      row.querySelector('.adm-del').addEventListener('click',function(){
+        if(!confirm('Delete this appointment?'))return;
+        sb.from('appointments').delete().eq('id',id).then(function(){ row.remove() });
+      });
+    });
+  });
+}
+function loadAdminServices(){
+  var box=document.getElementById('admin-services-list');
+  box.innerHTML='<div class="acct-empty">Loading…</div>';
+  sb.from('services').select('*').order('sort_order').then(function(res){
+    if(res.error||!res.data){box.innerHTML='<div class="acct-empty">Unable to load services.</div>';return}
+    box.innerHTML = res.data.map(function(s){
+      return '<div class="adm-row" data-id="'+s.id+'">'+
+        '<div><span class="adm-label">Category</span><input class="adm-cat" value="'+s.category+'"></div>'+
+        '<div><span class="adm-label">Name</span><input class="adm-name" value="'+s.name+'"></div>'+
+        '<div><span class="adm-label">Price ($)</span><input class="adm-price" type="number" step="0.01" value="'+s.price+'"></div>'+
+        '<div><span class="adm-label">Active</span><select class="adm-active"><option value="true"'+(s.active?' selected':'')+'>Active</option><option value="false"'+(!s.active?' selected':'')+'>Hidden</option></select></div>'+
+        '<div><button class="adm-del" type="button">Delete</button></div>'+
+      '</div>';
+    }).join('');
+    box.querySelectorAll('.adm-row').forEach(function(row){
+      var id=row.dataset.id;
+      function save(){
+        sb.from('services').update({
+          category: row.querySelector('.adm-cat').value,
+          name: row.querySelector('.adm-name').value,
+          price: parseFloat(row.querySelector('.adm-price').value)||0,
+          active: row.querySelector('.adm-active').value==='true'
+        }).eq('id',id).then(function(){});
+      }
+      row.querySelectorAll('input,select').forEach(function(el){ el.addEventListener('change',save) });
+      row.querySelector('.adm-del').addEventListener('click',function(){
+        if(!confirm('Delete this service?'))return;
+        sb.from('services').delete().eq('id',id).then(function(){ row.remove() });
+      });
+    });
+  });
+}
+var addSvcBtn=document.getElementById('add-svc-btn');
+if(addSvcBtn){
+  addSvcBtn.addEventListener('click',function(){
+    var cat=document.getElementById('new-svc-category').value.trim();
+    var name=document.getElementById('new-svc-name').value.trim();
+    var price=parseFloat(document.getElementById('new-svc-price').value)||0;
+    var duration=parseInt(document.getElementById('new-svc-duration').value)||60;
+    if(!cat||!name){alert('Category and name are required.');return}
+    sb.from('services').insert({category:cat,name:name,price:price,duration_minutes:duration}).then(function(res){
+      if(res.error){alert(res.error.message);return}
+      document.getElementById('new-svc-category').value='';
+      document.getElementById('new-svc-name').value='';
+      document.getElementById('new-svc-price').value='';
+      document.getElementById('new-svc-duration').value='';
+      loadAdminServices(); loadServices();
     });
   });
 }
@@ -497,6 +839,7 @@ if(!window.gsap){
   var mb=document.getElementById('menu-btn'),mc=document.getElementById('menu-close'),mn=document.getElementById('menu');
   if(mb&&mn){mb.addEventListener('click',function(){mn.style.visibility='visible';mn.style.clipPath='inset(0 0 0% 0)';mn.querySelectorAll('.m-link').forEach(function(l){l.style.opacity=1;l.style.transform='none'})})}
   if(mc&&mn){mc.addEventListener('click',function(){mn.style.visibility='hidden';mn.style.clipPath='inset(0 0 100% 0)'})}
+  window.__closeMenu = function(){ if(mn){mn.style.visibility='hidden';mn.style.clipPath='inset(0 0 100% 0)'} };
   return}
 gsap.registerPlugin(ScrollTrigger);
 var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -629,6 +972,7 @@ function closeMenu(){
 document.getElementById('menu-btn').addEventListener('click',openMenu);
 document.getElementById('menu-close').addEventListener('click',closeMenu);
 document.addEventListener('keydown',function(e){if(e.key==='Escape')closeMenu()});
+window.__closeMenu = closeMenu;
 links.forEach(function(l){
   l.addEventListener('mouseenter',function(){
     var src=l.getAttribute('data-prev');
