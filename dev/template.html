@@ -228,7 +228,10 @@ footer svg{width:26px;height:26px}
 .addr-toggle{width:100%;text-align:left;background:transparent;border:1px dashed rgba(201,205,212,.3);color:var(--chrome);font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;padding:11px 14px;margin:4px 0 14px;transition:border-color .3s,color .3s}
 .addr-toggle:hover{border-color:var(--crimson);color:var(--white)}
 .bk-submit{width:100%;margin-top:0;font-family:var(--mono);font-size:13px;letter-spacing:.22em;text-transform:uppercase;padding:16px;background:var(--crimson);color:var(--pure);border:0;transition:opacity .3s}
-.bk-sticky-footer{position:sticky;bottom:0;padding-top:16px;margin-top:8px;background:linear-gradient(180deg, rgba(14,14,18,0), rgba(14,14,18,.92) 22%, #0e0e12 46%);z-index:6}
+.bk-panel-form{display:flex;flex-direction:column;overflow:hidden}
+.bk-panel-form>form{flex:1 1 auto;min-height:0;display:flex;flex-direction:column}
+.bk-scroll{flex:1 1 auto;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;touch-action:pan-y;overscroll-behavior:contain}
+.bk-footer{flex-shrink:0;padding-top:16px;margin-top:8px;background:linear-gradient(180deg, rgba(14,14,18,0), rgba(14,14,18,.92) 22%, #0e0e12 46%);z-index:6}
 .bk-submit:disabled{opacity:.5}
 .bk-status{margin-top:14px;font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-align:center;min-height:18px}
 .bk-status.ok{color:#6fe08a}
@@ -480,11 +483,12 @@ footer svg{width:26px;height:26px}
 </div>
 
 <div id="booking-modal" aria-hidden="true">
-  <div class="bk-panel" data-lenis-prevent>
+  <div class="bk-panel bk-panel-form" data-lenis-prevent>
     <button class="bk-close" id="bk-close" type="button" aria-label="Close"><span class="x"></span></button>
     <h3>Book Your Slot</h3>
     <div class="bk-sub">Pick a job, pick a time — we'll confirm it</div>
     <form id="bk-form">
+      <div class="bk-scroll">
       <div class="bk-field"><label for="bk-name">Name</label><input id="bk-name" name="full_name" type="text" required autocomplete="name"></div>
       <div class="bk-field"><label for="bk-contact">Phone or email</label><input id="bk-contact" name="contact" type="text" required autocomplete="tel"></div>
       <div class="bk-field">
@@ -499,7 +503,8 @@ footer svg{width:26px;height:26px}
         <div class="bk-field"><label for="bk-time">Preferred time</label><input id="bk-time" name="appointment_time" type="time" required></div>
       </div>
       <div class="bk-field"><label for="bk-reason">Tell us more (optional)</label><textarea id="bk-reason" name="notes" placeholder="Any extra detail — write it in your own words..."></textarea></div>
-      <div class="bk-sticky-footer">
+      </div>
+      <div class="bk-footer">
         <button class="bk-submit" id="bk-submit" type="submit">Request appointment</button>
         <div class="bk-status" id="bk-status"></div>
       </div>
@@ -509,13 +514,14 @@ footer svg{width:26px;height:26px}
 
 <!-- AUTH MODAL -->
 <div id="auth-modal" aria-hidden="true">
-  <div class="bk-panel" data-lenis-prevent>
+  <div class="bk-panel bk-panel-form" data-lenis-prevent>
     <button class="bk-close" id="auth-close" type="button" aria-label="Close"><span class="x"></span></button>
     <div class="auth-tabs">
       <button type="button" class="auth-tab active" data-tab="signin">Sign In</button>
       <button type="button" class="auth-tab" data-tab="signup">Sign Up</button>
     </div>
     <form id="auth-form">
+      <div class="bk-scroll">
       <div class="auth-only-signup" style="display:none">
         <div class="bk-row2">
           <div class="bk-field"><label for="auth-fname">First Name</label><input id="auth-fname" type="text" autocomplete="given-name"></div>
@@ -543,20 +549,24 @@ footer svg{width:26px;height:26px}
           </div>
         </div>
       </div>
-      <div class="bk-sticky-footer">
+      </div>
+      <div class="bk-footer">
         <button class="bk-submit" id="auth-submit" type="submit">Sign In</button>
         <div class="bk-status" id="auth-status"></div>
       </div>
     </form>
 
     <form id="auth-otp-form" style="display:none">
+      <div class="bk-scroll">
       <div class="bk-sub" style="margin-bottom:16px">Enter the 6-digit code we emailed you</div>
       <div class="bk-field"><label for="auth-otp-code">Verification Code</label><input id="auth-otp-code" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="6" required></div>
-      <div class="bk-sticky-footer">
+      </div>
+      <div class="bk-footer">
         <button class="bk-submit" id="auth-otp-submit" type="submit">Verify & Continue</button>
         <div class="bk-status" id="auth-otp-status"></div>
       </div>
     </form>
+
   </div>
 </div>
 
@@ -674,7 +684,7 @@ var pendingSignupEmail='';
 var authMode='signin';
 function openAuth(mode){
   authMode=mode||'signin';
-  authForm.style.display='block'; authOtpForm.style.display='none';
+  authForm.style.display='flex'; authOtpForm.style.display='none';
   authTabs.forEach(function(t){t.classList.toggle('active',t.dataset.tab===authMode)});
   authOnlySignupEls.forEach(function(el){el.style.display = authMode==='signup' ? 'block' : 'none'});
   authPwInput.minLength = authMode==='signup' ? 8 : 6;
@@ -721,7 +731,7 @@ if(authForm){
       if(res.error){ throw res.error }
       if(authMode==='signup' && res.data && !res.data.session){
         pendingSignupEmail = email;
-        authForm.style.display='none'; authOtpForm.style.display='block';
+        authForm.style.display='none'; authOtpForm.style.display='flex';
         authOtpStatus.textContent=''; authOtpStatus.className='bk-status';
         authSubmit.disabled=false;
         return;
@@ -750,7 +760,7 @@ if(authOtpForm){
       if(res.error){ throw res.error }
       authOtpStatus.className='bk-status ok'; authOtpStatus.textContent='Verified — welcome!';
       setTimeout(function(){
-        modalClose(authModal); authForm.reset(); authOtpForm.reset(); authForm.style.display='block'; authOtpForm.style.display='none'; authOtpSubmit.disabled=false;
+        modalClose(authModal); authForm.reset(); authOtpForm.reset(); authForm.style.display='flex'; authOtpForm.style.display='none'; authOtpSubmit.disabled=false;
         if(bookingIntentActive){
           var toBook = pendingBookingService; pendingBookingService=null; bookingIntentActive=false;
           startBookingFlow(toBook);
