@@ -206,18 +206,21 @@ footer svg{width:26px;height:26px}
 .bk-close .x::before,.bk-close .x::after{content:"";position:absolute;top:50%;left:0;width:14px;height:2px;background:var(--white)}
 .bk-close .x::before{transform:rotate(45deg)}
 .bk-close .x::after{transform:rotate(-45deg)}
-.bk-field{margin-bottom:18px;display:flex;flex-direction:column;gap:8px}
+.bk-field{margin-bottom:14px;display:flex;flex-direction:column;gap:6px}
 .bk-field label{font-family:var(--mono);font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--gun)}
 .bk-field input,.bk-field textarea,.bk-field select{background:rgba(11,11,13,.6);border:1px solid rgba(201,205,212,.22);color:var(--white);padding:13px 14px;font-family:var(--body);font-size:14.5px;border-radius:2px}
 .bk-field input:focus,.bk-field textarea:focus{outline:none;border-color:var(--crimson)}
 .bk-field textarea{resize:vertical;min-height:90px}
 .bk-row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.bk-row3{display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:10px}
+.addr-toggle{width:100%;text-align:left;background:transparent;border:1px dashed rgba(201,205,212,.3);color:var(--chrome);font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;padding:11px 14px;margin:4px 0 14px;transition:border-color .3s,color .3s}
+.addr-toggle:hover{border-color:var(--crimson);color:var(--white)}
 .bk-submit{width:100%;margin-top:6px;font-family:var(--mono);font-size:13px;letter-spacing:.22em;text-transform:uppercase;padding:16px;background:var(--crimson);color:var(--pure);border:0;transition:opacity .3s}
 .bk-submit:disabled{opacity:.5}
 .bk-status{margin-top:14px;font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-align:center;min-height:18px}
 .bk-status.ok{color:#6fe08a}
 .bk-status.err{color:var(--crimson)}
-@media (max-width:520px){.bk-row2{grid-template-columns:1fr}}
+@media (max-width:520px){.bk-row2{grid-template-columns:1fr}.bk-row3{grid-template-columns:1fr 1fr}.bk-row3 .bk-field:first-child{grid-column:1/-1}}
 
 /* ---------- AUTH / ACCOUNT ---------- */
 .auth-tabs{display:flex;gap:0;margin-bottom:24px;border:1px solid rgba(201,205,212,.2)}
@@ -264,11 +267,14 @@ footer svg{width:26px;height:26px}
   .build-grid{grid-template-columns:1fr;row-gap:110px;max-width:440px}
   #menu{grid-template-columns:1fr}
   #menu .m-preview{display:none}
+  #menu .m-link{font-size:clamp(26px,7.2vw,42px);letter-spacing:.01em}
+  #menu .m-link .idx{font-size:10px;margin-right:8px}
   .r1{width:74vw}.r2{width:64vw}
   #timeline .tl-col{right:2vw;width:60vw}
   .tl-entry{opacity:.1}
-  .section{padding:14vh 7vw}
+  .section{padding:calc(6vh + 96px) 7vw 6vh}
   .brand .b-sub{display:none}
+  .bk-panel{padding:28px 22px;max-height:84vh}
 }
 </style>
 </head>
@@ -499,19 +505,21 @@ footer svg{width:26px;height:26px}
       <div class="bk-field"><label for="auth-password" id="auth-pw-label">Password</label><input id="auth-password" type="password" required autocomplete="current-password" minlength="6"></div>
       <div class="auth-only-signup" style="display:none">
         <div class="bk-field"><label for="auth-phone">Phone Number</label><input id="auth-phone" type="tel" autocomplete="tel" placeholder="(555) 000-0000"></div>
-        <div class="acct-sub-h" style="margin-top:22px">Shipping Address <span style="color:var(--gun);font-weight:400;text-transform:none;letter-spacing:0">(optional)</span></div>
-        <div class="bk-field"><label for="auth-street">Street Address</label><input id="auth-street" type="text" autocomplete="address-line1"></div>
-        <div class="bk-field"><label for="auth-apt">Apt / Suite (optional)</label><input id="auth-apt" type="text" autocomplete="address-line2"></div>
-        <div class="bk-row2">
-          <div class="bk-field"><label for="auth-city">City</label><input id="auth-city" type="text" autocomplete="address-level2"></div>
-          <div class="bk-field"><label for="auth-state">State</label>
-            <select id="auth-state" autocomplete="address-level1">
-              <option value="">Select state</option>
-              <option>AL</option><option>AK</option><option>AZ</option><option>AR</option><option>CA</option><option>CO</option><option>CT</option><option>DE</option><option>FL</option><option>GA</option><option>HI</option><option>ID</option><option>IL</option><option>IN</option><option>IA</option><option>KS</option><option>KY</option><option>LA</option><option>ME</option><option>MD</option><option>MA</option><option>MI</option><option>MN</option><option>MS</option><option>MO</option><option>MT</option><option>NE</option><option>NV</option><option>NH</option><option>NJ</option><option>NM</option><option>NY</option><option>NC</option><option>ND</option><option>OH</option><option>OK</option><option>OR</option><option>PA</option><option>RI</option><option>SC</option><option>SD</option><option>TN</option><option>TX</option><option>UT</option><option>VT</option><option>VA</option><option>WA</option><option>WV</option><option>WI</option><option>WY</option>
-            </select>
+        <button type="button" id="auth-addr-toggle" class="addr-toggle">+ Add shipping address (optional)</button>
+        <div id="auth-addr-fields" style="display:none">
+          <div class="bk-field"><label for="auth-street">Street Address</label><input id="auth-street" type="text" autocomplete="address-line1"></div>
+          <div class="bk-field"><label for="auth-apt">Apt / Suite (optional)</label><input id="auth-apt" type="text" autocomplete="address-line2"></div>
+          <div class="bk-row3">
+            <div class="bk-field"><label for="auth-city">City</label><input id="auth-city" type="text" autocomplete="address-level2"></div>
+            <div class="bk-field"><label for="auth-state">State</label>
+              <select id="auth-state" autocomplete="address-level1">
+                <option value="">--</option>
+                <option>AL</option><option>AK</option><option>AZ</option><option>AR</option><option>CA</option><option>CO</option><option>CT</option><option>DE</option><option>FL</option><option>GA</option><option>HI</option><option>ID</option><option>IL</option><option>IN</option><option>IA</option><option>KS</option><option>KY</option><option>LA</option><option>ME</option><option>MD</option><option>MA</option><option>MI</option><option>MN</option><option>MS</option><option>MO</option><option>MT</option><option>NE</option><option>NV</option><option>NH</option><option>NJ</option><option>NM</option><option>NY</option><option>NC</option><option>ND</option><option>OH</option><option>OK</option><option>OR</option><option>PA</option><option>RI</option><option>SC</option><option>SD</option><option>TN</option><option>TX</option><option>UT</option><option>VT</option><option>VA</option><option>WA</option><option>WV</option><option>WI</option><option>WY</option>
+              </select>
+            </div>
+            <div class="bk-field"><label for="auth-zip">ZIP</label><input id="auth-zip" type="text" autocomplete="postal-code" inputmode="numeric"></div>
           </div>
         </div>
-        <div class="bk-field"><label for="auth-zip">ZIP Code</label><input id="auth-zip" type="text" autocomplete="postal-code" inputmode="numeric"></div>
       </div>
       <button class="bk-submit" id="auth-submit" type="submit">Sign In</button>
       <div class="bk-status" id="auth-status"></div>
@@ -646,10 +654,19 @@ function openAuth(mode){
   authPwInput.minLength = authMode==='signup' ? 8 : 6;
   authPwLabel.textContent = authMode==='signup' ? 'Password (min 8 chars)' : 'Password';
   authSubmit.textContent = authMode==='signup' ? 'Create Account' : 'Sign In';
+  if(authAddrFields){authAddrFields.style.display='none'; authAddrToggle.textContent='+ Add shipping address (optional)'}
   authStatus.textContent=''; authStatus.className='bk-status';
   modalOpen(authModal);
 }
 authTabs.forEach(function(t){t.addEventListener('click',function(){openAuth(t.dataset.tab)})});
+var authAddrToggle=document.getElementById('auth-addr-toggle'), authAddrFields=document.getElementById('auth-addr-fields');
+if(authAddrToggle){
+  authAddrToggle.addEventListener('click',function(){
+    var showing = authAddrFields.style.display==='block';
+    authAddrFields.style.display = showing ? 'none' : 'block';
+    authAddrToggle.textContent = showing ? '+ Add shipping address (optional)' : '– Hide shipping address';
+  });
+}
 if(authForm){
   authForm.addEventListener('submit',function(e){
     e.preventDefault();
