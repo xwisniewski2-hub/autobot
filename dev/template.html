@@ -209,7 +209,7 @@ footer svg{width:26px;height:26px}
 /* ---------- BOOKING MODAL ---------- */
 #booking-modal{position:fixed;inset:0;z-index:70;display:none;align-items:center;justify-content:center;padding:6vh 5vw;background:rgba(6,6,7,.78);backdrop-filter:blur(6px)}
 #booking-modal.open{display:flex}
-.bk-panel{position:relative;width:min(560px,100%);max-height:88vh;overflow-y:auto;background:linear-gradient(165deg,var(--steel),#0e0e12);border:1px solid rgba(201,205,212,.16);padding:38px 32px}
+.bk-panel{position:relative;width:min(560px,100%);max-height:88vh;overflow-y:auto;-webkit-overflow-scrolling:touch;touch-action:pan-y;overscroll-behavior:contain;background:linear-gradient(165deg,var(--steel),#0e0e12);border:1px solid rgba(201,205,212,.16);padding:38px 32px}
 .bk-panel h3{font-family:var(--anton);font-size:clamp(28px,4vw,38px);text-transform:uppercase;margin-bottom:6px}
 .bk-panel .bk-sub{font-family:var(--mono);font-size:11px;letter-spacing:.24em;color:var(--gun);text-transform:uppercase;margin-bottom:26px}
 .bk-close{position:absolute;top:20px;right:20px;width:36px;height:36px;border:1px solid rgba(201,205,212,.25);display:grid;place-items:center;transition:border-color .3s}
@@ -257,7 +257,7 @@ footer svg{width:26px;height:26px}
 /* ---------- ADMIN PANEL ---------- */
 #admin-modal{position:fixed;inset:0;z-index:75;display:none;background:rgba(6,6,7,.92);backdrop-filter:blur(6px);padding:5vh 4vw}
 #admin-modal.open{display:block}
-.admin-panel{max-width:1100px;margin:0 auto;background:linear-gradient(165deg,var(--steel),#0e0e12);border:1px solid rgba(201,205,212,.16);max-height:90vh;display:flex;flex-direction:column}
+.admin-panel{max-width:1100px;margin:0 auto;background:linear-gradient(165deg,var(--steel),#0e0e12);border:1px solid rgba(201,205,212,.16);max-height:90vh;display:flex;flex-direction:column;-webkit-overflow-scrolling:touch;touch-action:pan-y;overscroll-behavior:contain}
 .admin-head{display:flex;justify-content:space-between;align-items:center;padding:28px 32px 0}
 .admin-head h3{font-family:var(--anton);font-size:clamp(26px,3.6vw,34px);text-transform:uppercase}
 .admin-tabs{display:flex;gap:0;margin:20px 32px 0;border:1px solid rgba(201,205,212,.2)}
@@ -283,8 +283,9 @@ footer svg{width:26px;height:26px}
   #menu .m-link{font-size:clamp(26px,7.2vw,42px);letter-spacing:.01em}
   #menu .m-link .idx{font-size:10px;margin-right:8px}
   .r1{width:74vw}.r2{width:64vw}
-  #timeline .tl-col{right:2vw;width:60vw}
-  .tl-entry{opacity:.1}
+  #timeline .tl-col{right:1vw;width:42vw}
+  .tl-entry{opacity:.06}
+  .tl-entry .tl-year{font-size:clamp(26px,5vw,52px)}
   .section{padding:calc(6vh + 96px) 7vw 6vh}
   .brand .b-sub{display:none}
   .bk-panel{padding:28px 22px;max-height:84vh}
@@ -479,7 +480,7 @@ footer svg{width:26px;height:26px}
 </div>
 
 <div id="booking-modal" aria-hidden="true">
-  <div class="bk-panel">
+  <div class="bk-panel" data-lenis-prevent>
     <button class="bk-close" id="bk-close" type="button" aria-label="Close"><span class="x"></span></button>
     <h3>Book Your Slot</h3>
     <div class="bk-sub">Pick a job, pick a time — we'll confirm it</div>
@@ -508,7 +509,7 @@ footer svg{width:26px;height:26px}
 
 <!-- AUTH MODAL -->
 <div id="auth-modal" aria-hidden="true">
-  <div class="bk-panel">
+  <div class="bk-panel" data-lenis-prevent>
     <button class="bk-close" id="auth-close" type="button" aria-label="Close"><span class="x"></span></button>
     <div class="auth-tabs">
       <button type="button" class="auth-tab active" data-tab="signin">Sign In</button>
@@ -561,7 +562,7 @@ footer svg{width:26px;height:26px}
 
 <!-- MY ACCOUNT PANEL -->
 <div id="account-modal" aria-hidden="true">
-  <div class="bk-panel acct-panel">
+  <div class="bk-panel acct-panel" data-lenis-prevent>
     <button class="bk-close" id="account-close" type="button" aria-label="Close"><span class="x"></span></button>
     <h3>My Account</h3>
     <div class="bk-sub" id="acct-email"></div>
@@ -576,7 +577,7 @@ footer svg{width:26px;height:26px}
 
 <!-- ADMIN PANEL -->
 <div id="admin-modal" aria-hidden="true">
-  <div class="admin-panel">
+  <div class="admin-panel" data-lenis-prevent>
     <div class="admin-head">
       <h3>Shop Admin</h3>
       <button class="bk-close" id="admin-close" type="button" aria-label="Close"><span class="x"></span></button>
