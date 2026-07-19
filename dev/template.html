@@ -143,6 +143,11 @@ h1,h2,.giant{font-family:var(--anton);font-weight:400;text-transform:uppercase;l
 #services h2{font-size:clamp(44px,7vw,110px);margin-bottom:8px}
 #services .sec-sub{font-family:var(--mono);font-size:12px;letter-spacing:.3em;color:var(--gun);text-transform:uppercase;margin-bottom:54px}
 .svc-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;max-width:1080px}
+.build-gallery{display:flex;flex-direction:column;gap:26px;max-width:880px;margin:0 auto}
+.build-photo{margin:0;overflow:hidden;position:relative;border:1px solid rgba(201,205,212,.16);border-top:3px solid var(--crimson)}
+.build-photo:nth-child(even){border-top-color:var(--blue)}
+.build-photo img{width:100%;height:auto;display:block;transition:transform .6s ease}
+.build-photo:hover img{transform:scale(1.03)}
 .svc{position:relative;background:linear-gradient(160deg,var(--steel),var(--steel-2));border:1px solid rgba(201,205,212,.14);padding:38px 32px 34px;overflow:hidden;transition:transform .45s cubic-bezier(.2,.8,.2,1)}
 .svc::before{content:"";position:absolute;inset:0;padding:1px;background:conic-gradient(from var(--a,0deg),var(--crimson),var(--blue),transparent 30%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:0;transition:opacity .4s}
 .svc:hover{transform:translateY(-6px)}
@@ -411,6 +416,18 @@ footer svg{width:26px;height:26px}
       <span class="chip"><b>TIG</b> / MIG certified</span>
       <span class="chip">All makes <b>welcome</b></span>
       <span class="chip">Rider <b>owned</b></span>
+    </div>
+  </section>
+
+  <section class="section" id="gallery">
+    <div class="eyebrow reveal">Real builds</div>
+    <div class="story-line reveal">Off the lift.<br><em class="u-blue">Not off a render.</em></div>
+    <p class="reveal">A few of our own — built, ridden, and photographed on the road, not generated.</p>
+    <div class="build-gallery">
+      <figure class="build-photo reveal"><img src="gallery/build-01.jpg" alt="Custom bobber gas tank — skull and playing cards pinstripe paint" loading="lazy"></figure>
+      <figure class="build-photo reveal"><img src="gallery/build-02.jpg" alt="Custom black bobber build, full side profile" loading="lazy"></figure>
+      <figure class="build-photo reveal"><img src="gallery/build-03.jpg" alt="Custom bagger parked at a mountain overlook, front angle" loading="lazy"></figure>
+      <figure class="build-photo reveal"><img src="gallery/build-04.jpg" alt="Custom bagger side profile on a mountain road" loading="lazy"></figure>
     </div>
   </section>
 
