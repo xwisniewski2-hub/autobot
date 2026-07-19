@@ -69,7 +69,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 
 /* ---------- CONTENT ---------- */
 #content{position:relative;z-index:10}
-.section{position:relative;min-height:auto;padding:calc(8vh + 96px) 6vw 8vh;display:flex;flex-direction:column;justify-content:center}
+.section{position:relative;min-height:auto;padding:calc(4vh + 72px) 6vw 4vh;display:flex;flex-direction:column;justify-content:center}
 .eyebrow{display:flex;align-items:center;gap:14px;font-family:var(--mono);font-size:12px;letter-spacing:.34em;text-transform:uppercase;color:var(--gun);margin-bottom:26px}
 .eyebrow::before{content:"";width:44px;height:1px;background:var(--crimson)}
 .eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--crimson);box-shadow:0 0 10px var(--crimson);animation:pulse 2.2s ease-in-out infinite}
@@ -328,7 +328,7 @@ footer svg{width:26px;height:26px}
   .tl-entry{opacity:.06}
   .tl-entry .tl-year{font-size:clamp(26px,5vw,52px)}
   .rider .r-tag{opacity:.35}
-  .section{padding:calc(6vh + 96px) 7vw 6vh}
+  .section{padding:calc(3vh + 72px) 7vw 3vh}
   .brand .b-sub{display:none}
   .bk-panel{padding:28px 22px;max-height:84vh}
 }
@@ -361,17 +361,6 @@ footer svg{width:26px;height:26px}
   <div class="blob b-red"></div><div class="blob b-blue"></div><div class="blob b-white"></div>
 </div>
 <div class="layer" id="grain" aria-hidden="true"></div>
-
-<!-- LAYER 5 : THE RIDERS -->
-<div class="layer" id="riders" aria-hidden="true">
-  <div class="rider r2" id="rider2">
-    <div class="bob">
-      <div class="r-tag">ON THE <b>LIFT</b></div>
-      <img src="__IMG_bike2__" alt="" width="900" height="584">
-      <div class="shadow"></div>
-    </div>
-  </div>
-</div>
 
 <!-- HEADER -->
 <header id="site-head">
@@ -1277,9 +1266,6 @@ if(addSvcBtn){
 
 if(!window.gsap){
   document.querySelectorAll('.reveal,#hero h1 .w span').forEach(function(el){el.style.opacity=1;el.style.transform='none'});
-  var fr1=document.getElementById('rider1'),fr2=document.getElementById('rider2');
-  if(fr1){fr1.style.opacity=1;fr1.style.transform='translate('+(innerWidth*0.16)+'px,'+(innerHeight*0.34)+'px)'}
-  if(fr2){fr2.style.opacity=1;fr2.style.transform='translate('+(innerWidth*0.56)+'px,'+(innerHeight*0.56)+'px)'}
   var mb=document.getElementById('menu-btn'),mc=document.getElementById('menu-close'),mn=document.getElementById('menu');
   if(mb&&mn){mb.addEventListener('click',function(){mn.style.visibility='visible';mn.style.clipPath='inset(0 0 0% 0)';mn.querySelectorAll('.m-link').forEach(function(l){l.style.opacity=1;l.style.transform='none'})})}
   if(mc&&mn){mc.addEventListener('click',function(){mn.style.visibility='hidden';mn.style.clipPath='inset(0 0 100% 0)'})}
@@ -1315,35 +1301,13 @@ document.querySelectorAll('[data-nav]').forEach(function(a){
   });
 });
 
-/* ---- hero intro: words assemble, riders enter ---- */
+/* ---- hero intro: words assemble ---- */
 var intro=gsap.timeline({defaults:{ease:'power3.out'}});
 intro.to('#hero h1 .w span',{y:0,duration:1.15,stagger:0.14},0.15)
      .to('#hero .reveal',{opacity:1,y:0,duration:1.1,stagger:0.15},0.7);
 
-/* ---- rider path: enter, then ride DOWN the page with scroll ---- */
-var r2=document.getElementById('rider2');
 function vw(p){return window.innerWidth*p/100}
 function vh(p){return window.innerHeight*p/100}
-function place(){
-  gsap.set(r2,{x:vw(110),y:mobile?vh(58):vh(56),opacity:1});
-}
-place();
-intro.to(r2,{x:mobile?vw(30):vw(56),duration:1.7,ease:'power3.out'},0.72);
-
-/* scrubbed journey — keyframed weave down the page */
-if(!reduce){
-  var ride=gsap.timeline({scrollTrigger:{trigger:'#content',start:'top top',end:'bottom bottom',scrub:1.2}});
-  /* shop: cross sides */
-  ride.to(r2,{x:mobile?vw(4):vw(6),y:vh(62),ease:'none'},0)
-  /* services: pull to edges, shrink */
-      .to(r2,{x:mobile?vw(54):vw(72),y:vh(12),scale:0.66,ease:'none'},0.32)
-  /* creed: roar back through the middle */
-      .to(r2,{x:mobile?vw(24):vw(14),y:vh(20),scale:0.85,ease:'none'},0.64)
-  /* cta: ride off the bottom of the page */
-      .to(r2,{x:mobile?vw(-10):vw(2),y:vh(118),scale:0.9,ease:'none'},0.87);
-}else{
-  gsap.set(r2,{x:vw(56),y:vh(56),opacity:1});
-}
 
 /* ---- timeline layer: slow parallax drift ---- */
 var tlCol=document.getElementById('tl-col');
@@ -1434,7 +1398,6 @@ window.addEventListener('load',function(){ScrollTrigger.refresh()});
 /* FINAL OVERRIDE — must stay last in the document. See index.html for full explanation:
    fixes .cdrop's row-layout flex-basis(260px) becoming a mobile column-layout height. */
 @media (max-width:560px){.cdrop{flex-basis:auto!important}}
-#rider1{display:none!important}
 
 </style>
 </body>
