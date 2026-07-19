@@ -179,7 +179,6 @@ h1,h2,.giant{font-family:var(--anton);font-weight:400;text-transform:uppercase;l
 #cta .cta-plate{position:absolute;inset:12% 6% -4%;background:
   radial-gradient(60% 70% at 50% 85%, rgba(226,59,59,.3), transparent 72%),
   linear-gradient(180deg, rgba(46,95,216,.14), transparent 60%);border:1px solid rgba(201,205,212,.12)}
-#cta .cta-bike{position:relative;width:100%;filter:drop-shadow(0 34px 40px rgba(0,0,0,.65))}
 #cta h2{font-size:clamp(46px,7.4vw,112px)}
 #cta h2 i{font-style:normal;color:var(--crimson)}
 #cta .aud{max-width:520px;color:var(--chrome);line-height:1.7;margin-top:22px;font-size:15.5px}
@@ -194,10 +193,6 @@ footer svg{width:26px;height:26px}
 #menu .m-links:hover .m-link{opacity:.28}
 #menu .m-links .m-link:hover{opacity:1;color:var(--crimson);transform:translateX(10px)!important}
 #menu .m-link .idx{font-family:var(--mono);font-size:12px;letter-spacing:.3em;color:var(--gun);vertical-align:super;margin-right:14px}
-#menu .m-preview{position:relative;justify-self:center;width:min(34vw,440px)}
-#menu .m-preview .p-plate{position:absolute;inset:22% -6% -8%;background:radial-gradient(60% 70% at 50% 85%, rgba(226,59,59,.3), transparent 72%);border:1px solid rgba(201,205,212,.14)}
-#menu .m-preview img{position:relative;width:112%;left:-6%;filter:drop-shadow(0 26px 30px rgba(0,0,0,.6));transition:opacity .35s}
-#menu .m-preview .p-label{position:absolute;bottom:-40px;left:0;font-family:var(--mono);font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--gun)}
 #menu-close{position:absolute;top:26px;right:4vw;width:52px;height:52px;border:1px solid rgba(201,205,212,.3);display:grid;place-items:center;transition:border-color .3s,transform .45s cubic-bezier(.2,.8,.2,1)}
 #menu-close:hover{border-color:var(--crimson);transform:rotate(90deg)}
 #menu-close .x{position:relative;width:20px;height:20px}
@@ -320,7 +315,6 @@ footer svg{width:26px;height:26px}
   .svc-grid{grid-template-columns:1fr}
   .build-grid{grid-template-columns:1fr;row-gap:110px;max-width:440px}
   #menu{grid-template-columns:1fr}
-  #menu .m-preview{display:none}
   #menu .m-link{font-size:clamp(26px,7.2vw,42px);letter-spacing:.01em}
   #menu .m-link .idx{font-size:10px;margin-right:8px}
   .r1{width:74vw}.r2{width:64vw}
@@ -476,7 +470,6 @@ footer svg{width:26px;height:26px}
   <section class="section" id="cta">
     <div class="cta-stage reveal">
       <div class="cta-plate"></div>
-      <img class="cta-bike" src="__IMG_v1__" alt="Custom build at Rising Sun Kustoms" width="900" height="448">
     </div>
     <h2 class="reveal">Your bike. Our hands.<br><i>Let's ride.</i></h2>
     <p class="aud reveal">For every rider who wants it fixed right, welded strong, or built from nothing — bring it by the shop and let's talk.</p>
@@ -497,16 +490,11 @@ footer svg{width:26px;height:26px}
 <nav id="menu" aria-hidden="true">
   <button id="menu-close" aria-label="Close menu"><span class="x"></span></button>
   <div class="m-links">
-    <a class="m-link" href="#hero" data-nav data-prev="__IMG_v1__" data-plabel="Home"><span class="idx">01</span>Home</a>
-    <a class="m-link" href="#shop" data-nav data-prev="__IMG_bike2__" data-plabel="The shop"><span class="idx">02</span>The Shop</a>
-    <a class="m-link" href="#services" data-nav data-prev="__IMG_v1__" data-plabel="Welding & fab"><span class="idx">03</span>What We Do</a>
-    <a class="m-link" href="#cta" data-nav data-prev="__IMG_bike2__" data-plabel="Book your slot"><span class="idx">04</span>Book</a>
-    <a class="m-link" href="#" id="account-link" data-prev="__IMG_v1__" data-plabel="Your account"><span class="idx">05</span><span id="account-link-text">Sign In / Sign Up</span></a>
-  </div>
-  <div class="m-preview">
-    <div class="p-plate"></div>
-    <img id="m-preview-img" src="__IMG_v1__" alt="" width="900" height="448">
-    <div class="p-label" id="m-preview-label">Home</div>
+    <a class="m-link" href="#hero" data-nav><span class="idx">01</span>Home</a>
+    <a class="m-link" href="#shop" data-nav><span class="idx">02</span>The Shop</a>
+    <a class="m-link" href="#services" data-nav><span class="idx">03</span>What We Do</a>
+    <a class="m-link" href="#cta" data-nav><span class="idx">04</span>Book</a>
+    <a class="m-link" href="#" id="account-link"><span class="idx">05</span><span id="account-link-text">Sign In / Sign Up</span></a>
   </div>
 </nav>
 
@@ -1353,7 +1341,6 @@ if(!mobile && !reduce && window.matchMedia('(pointer:fine)').matches){
 
 /* ---- menu ---- */
 var menu=document.getElementById('menu'), links=menu.querySelectorAll('.m-link');
-var pImg=document.getElementById('m-preview-img'), pLab=document.getElementById('m-preview-label');
 var menuOpen=false;
 function openMenu(){
   if(menuOpen)return; menuOpen=true;
@@ -1374,18 +1361,6 @@ document.getElementById('menu-btn').addEventListener('click',openMenu);
 document.getElementById('menu-close').addEventListener('click',closeMenu);
 document.addEventListener('keydown',function(e){if(e.key==='Escape')closeMenu()});
 window.__closeMenu = closeMenu;
-links.forEach(function(l){
-  l.addEventListener('mouseenter',function(){
-    var src=l.getAttribute('data-prev');
-    if(src && pImg.getAttribute('src')!==src){
-      gsap.to(pImg,{opacity:0,duration:0.18,onComplete:function(){
-        pImg.setAttribute('src',src);
-        pLab.textContent=l.getAttribute('data-plabel')||'';
-        gsap.to(pImg,{opacity:1,duration:0.3});
-      }});
-    }
-  });
-});
 
 /* ---- keep rider coords honest on resize + after fonts settle ---- */
 var rT; window.addEventListener('resize',function(){clearTimeout(rT);rT=setTimeout(function(){ScrollTrigger.refresh()},250)});
