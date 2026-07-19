@@ -364,13 +364,6 @@ footer svg{width:26px;height:26px}
 
 <!-- LAYER 5 : THE RIDERS -->
 <div class="layer" id="riders" aria-hidden="true">
-  <div class="rider r1" id="rider1">
-    <div class="bob">
-      <div class="r-tag">IN THE <b>SHOP</b></div>
-      <img src="__IMG_v1__" alt="" width="900" height="448">
-      <div class="shadow"></div>
-    </div>
-  </div>
   <div class="rider r2" id="rider2">
     <div class="bob">
       <div class="r-tag">ON THE <b>LIFT</b></div>
@@ -1328,34 +1321,27 @@ intro.to('#hero h1 .w span',{y:0,duration:1.15,stagger:0.14},0.15)
      .to('#hero .reveal',{opacity:1,y:0,duration:1.1,stagger:0.15},0.7);
 
 /* ---- rider path: enter, then ride DOWN the page with scroll ---- */
-var r1=document.getElementById('rider1'), r2=document.getElementById('rider2');
+var r2=document.getElementById('rider2');
 function vw(p){return window.innerWidth*p/100}
 function vh(p){return window.innerHeight*p/100}
 function place(){
-  gsap.set(r1,{x:mobile?vw(-90):vw(-52),y:mobile?vh(30):vh(34),opacity:1});
   gsap.set(r2,{x:vw(110),y:mobile?vh(58):vh(56),opacity:1});
 }
 place();
-intro.to(r1,{x:mobile?vw(10):vw(16),duration:1.7,ease:'power3.out'},0.5)
-     .to(r2,{x:mobile?vw(30):vw(56),duration:1.7,ease:'power3.out'},0.72);
+intro.to(r2,{x:mobile?vw(30):vw(56),duration:1.7,ease:'power3.out'},0.72);
 
 /* scrubbed journey — keyframed weave down the page */
 if(!reduce){
   var ride=gsap.timeline({scrollTrigger:{trigger:'#content',start:'top top',end:'bottom bottom',scrub:1.2}});
   /* shop: cross sides */
-  ride.to(r1,{x:mobile?vw(24):vw(48),y:vh(30),ease:'none'},0)
-      .to(r2,{x:mobile?vw(4):vw(6),y:vh(62),ease:'none'},0)
+  ride.to(r2,{x:mobile?vw(4):vw(6),y:vh(62),ease:'none'},0)
   /* services: pull to edges, shrink */
-      .to(r1,{x:mobile?vw(-14):vw(-6),y:vh(64),scale:0.72,ease:'none'},0.32)
       .to(r2,{x:mobile?vw(54):vw(72),y:vh(12),scale:0.66,ease:'none'},0.32)
   /* creed: roar back through the middle */
-      .to(r1,{x:mobile?vw(6):vw(40),y:vh(52),scale:0.9,ease:'none'},0.64)
       .to(r2,{x:mobile?vw(24):vw(14),y:vh(20),scale:0.85,ease:'none'},0.64)
   /* cta: ride off the bottom of the page */
-      .to(r1,{x:mobile?vw(30):vw(64),y:vh(115),scale:0.95,ease:'none'},0.87)
       .to(r2,{x:mobile?vw(-10):vw(2),y:vh(118),scale:0.9,ease:'none'},0.87);
 }else{
-  gsap.set(r1,{x:vw(16),y:vh(34),opacity:1});
   gsap.set(r2,{x:vw(56),y:vh(56),opacity:1});
 }
 
