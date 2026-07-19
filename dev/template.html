@@ -407,18 +407,6 @@ footer svg{width:26px;height:26px}
     <div class="scroll-ind"><span class="line"></span> Scroll to ride</div>
   </section>
 
-  <section class="section" id="shop">
-    <div class="ghost-word" style="top:8%;left:-2%">WELD</div>
-    <div class="eyebrow reveal">The shop</div>
-    <div class="story-line reveal">One garage.<br><em>Two hands.</em><br><em class="u-blue">Zero shortcuts.</em></div>
-    <p class="reveal">Rising Sun Kustoms is a working shop, not a showroom. Engines get diagnosed, frames get welded, and every bike leaves better than it came in. If it rolls on two wheels, it belongs here.</p>
-    <div class="spec-chips reveal">
-      <span class="chip"><b>TIG</b> / MIG certified</span>
-      <span class="chip">All makes <b>welcome</b></span>
-      <span class="chip">Rider <b>owned</b></span>
-    </div>
-  </section>
-
   <section class="section" id="gallery">
     <div class="eyebrow reveal">Real builds</div>
     <div class="story-line reveal">Off the lift.<br><em class="u-blue">Not off a render.</em></div>
@@ -428,6 +416,18 @@ footer svg{width:26px;height:26px}
       <figure class="build-photo reveal"><img src="gallery/build-02.jpg" alt="Custom black bobber build, full side profile" loading="lazy"></figure>
       <figure class="build-photo reveal"><img src="gallery/build-03.jpg" alt="Custom bagger parked at a mountain overlook, front angle" loading="lazy"></figure>
       <figure class="build-photo reveal"><img src="gallery/build-04.jpg" alt="Custom bagger side profile on a mountain road" loading="lazy"></figure>
+    </div>
+  </section>
+
+  <section class="section" id="shop">
+    <div class="ghost-word" style="top:8%;left:-2%">WELD</div>
+    <div class="eyebrow reveal">The shop</div>
+    <div class="story-line reveal">One garage.<br><em>Two hands.</em><br><em class="u-blue">Zero shortcuts.</em></div>
+    <p class="reveal">Rising Sun Kustoms is a working shop, not a showroom. Engines get diagnosed, frames get welded, and every bike leaves better than it came in. If it rolls on two wheels, it belongs here.</p>
+    <div class="spec-chips reveal">
+      <span class="chip"><b>TIG</b> / MIG certified</span>
+      <span class="chip">All makes <b>welcome</b></span>
+      <span class="chip">Rider <b>owned</b></span>
     </div>
   </section>
 
@@ -1448,6 +1448,8 @@ window.addEventListener('load',function(){ScrollTrigger.refresh()});
 /* FINAL OVERRIDE — must stay last in the document. See index.html for full explanation:
    fixes .cdrop's row-layout flex-basis(260px) becoming a mobile column-layout height. */
 @media (max-width:560px){.cdrop{flex-basis:auto!important}}
+#rider1{display:none!important}
+
 </style>
 </body>
 </html>
